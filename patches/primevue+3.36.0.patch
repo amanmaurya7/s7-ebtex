@@ -1,0 +1,68 @@
+diff --git a/node_modules/primevue/carousel/Carousel.vue b/node_modules/primevue/carousel/Carousel.vue
+index cd189b1..584789b 100755
+--- a/node_modules/primevue/carousel/Carousel.vue
++++ b/node_modules/primevue/carousel/Carousel.vue
+@@ -401,7 +401,11 @@ export default {
+             };
+         },
+         onTouchMove(e) {
+-            if (e.cancelable) {
++            const touchobj = e.changedTouches[0];
++            const diff = this.isVertical()
++                ? touchobj.pageY - this.startPos.y
++                : touchobj.pageX - this.startPos.x;
++            if (Math.abs(diff) > this.swipeThreshold && e.cancelable) {
+                 e.preventDefault();
+             }
+         },
+diff --git a/node_modules/primevue/carousel/carousel.cjs.js b/node_modules/primevue/carousel/carousel.cjs.js
+index c2712e6..e12896f 100644
+--- a/node_modules/primevue/carousel/carousel.cjs.js
++++ b/node_modules/primevue/carousel/carousel.cjs.js
+@@ -332,7 +332,11 @@ var script = {
+       };
+     },
+     onTouchMove: function onTouchMove(e) {
+-      if (e.cancelable) {
++      const touchobj = e.changedTouches[0];
++      const diff = this.isVertical()
++          ? touchobj.pageY - this.startPos.y
++          : touchobj.pageX - this.startPos.x;
++      if (Math.abs(diff) > this.swipeThreshold && e.cancelable) {
+         e.preventDefault();
+       }
+     },
+diff --git a/node_modules/primevue/carousel/carousel.esm.js b/node_modules/primevue/carousel/carousel.esm.js
+index d460300..ef6a232 100644
+--- a/node_modules/primevue/carousel/carousel.esm.js
++++ b/node_modules/primevue/carousel/carousel.esm.js
+@@ -320,7 +320,11 @@ var script = {
+       };
+     },
+     onTouchMove: function onTouchMove(e) {
+-      if (e.cancelable) {
++      const touchobj = e.changedTouches[0];
++      const diff = this.isVertical()
++          ? touchobj.pageY - this.startPos.y
++          : touchobj.pageX - this.startPos.x;
++      if (Math.abs(diff) > this.swipeThreshold && e.cancelable) {
+         e.preventDefault();
+       }
+     },
+diff --git a/node_modules/primevue/carousel/carousel.js b/node_modules/primevue/carousel/carousel.js
+index 24c9d0a..32003d6 100644
+--- a/node_modules/primevue/carousel/carousel.js
++++ b/node_modules/primevue/carousel/carousel.js
+@@ -324,7 +324,11 @@ this.primevue.carousel = (function (ChevronDownIcon, ChevronLeftIcon, ChevronRig
+           };
+         },
+         onTouchMove: function onTouchMove(e) {
+-          if (e.cancelable) {
++          const touchobj = e.changedTouches[0];
++          const diff = this.isVertical()
++              ? touchobj.pageY - this.startPos.y
++              : touchobj.pageX - this.startPos.x;
++          if (Math.abs(diff) > this.swipeThreshold && e.cancelable) {
+             e.preventDefault();
+           }
+         },

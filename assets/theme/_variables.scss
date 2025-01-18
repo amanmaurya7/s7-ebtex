@@ -1,0 +1,113 @@
+// Theme Specific Variables
+$primaryColor: #008080;
+$primaryDarkColor: #004d4d;
+$primaryDarkerColor: #001a1a;
+$primaryTextColor: #ffffff;
+$themeColors: 'm1', 'm2', 'm3', 'm4', 'm5', 'h0', 'h100', 'k1', 'k2', 'w1', 'w2', 'error';
+
+$colors: (
+    "blue": #5E7AE0,
+    "green": #4caf50,
+    "yellow": #FAFF00,
+    "gold": #d99a26,
+    "cyan": #00BCD4,
+    "neon": #1EBEA4,
+    "ping": #FFE8E8,
+    "indigo": #563DBA,
+    "teal": #009688,
+    "orange": #F2A33A,
+    "bluegray": #607D8B,
+    "purple": #AA69CB,
+    "red": #ED0000,
+    "primary": $primaryColor,
+    "lightgray": #E9EEF2,
+    "darkgray": #1E1433,
+    "black": #000000,
+
+    "m1": #001a1a,
+    "m2": #004d4d,
+    "m3": #008080,
+    "m4": #00b3b3,
+    "m5": #00e6e6,
+    "h0": #6680ff,
+    "h100": #ffaa00,
+    "k1": #ffaa00,
+    "k2": #ffaa00,
+    "w1": #ffffff,
+    "w2": #e5ffff,
+    "error": #cc0000
+);
+
+// Mandatory Designer Variables
+@import './variables/general';
+@import './variables/form';
+@import './variables/button';
+@import './variables/panel';
+@import './variables/_data';
+@import './variables/_overlay';
+@import './variables/_message';
+@import './variables/_menu';
+@import './variables/_media';
+@import './variables/_misc';
+
+:root {
+    --m1: #{map-get($colors, m1)};
+    --m2: #{map-get($colors, m2)};
+    --m3: #{map-get($colors, m3)};
+    --m4: #{map-get($colors, m4)};
+    --m5: #{map-get($colors, m5)};
+    --k1: #{map-get($colors, k1)};
+    --k2: #{map-get($colors, k2)};
+    --h0: #{map-get($colors, h0)};
+    --h100: #{map-get($colors, h100)};
+    --w1: #{map-get($colors, w1)};
+    --w2: #{map-get($colors, w2)};
+    --m3-a20: #{map-get($colors, m3-a20)};
+    --m3-a50: #{map-get($colors, m3-a50)};
+
+    --m3-a20: #00808051;
+    --m3-a50: #00808080;
+    --text-color:#001a1a;
+    --text-color-a20:#001a1a51;
+    --text-color-secondary:#6c757d;
+    --primary-color:$primaryColor;
+    --primary-color-text:$primaryTextColor;
+    --font-family: 'Montserrat';
+    --surface-0: #ffffff;
+    --surface-50: #FAFAFA;
+    --surface-100: #F5F5F5;
+    --surface-200: #EEEEEE;
+    --surface-300: #E0E0E0;
+    --surface-400: #BDBDBD;
+    --surface-500: #9E9E9E;
+    --surface-600: #757575;
+    --surface-700: #616161;
+    --surface-800: #424242;
+    --surface-900: #212121;
+    --gray-50: rgba($color: #fff, $alpha: 10%);
+    --gray-100: #FFFFFF; // no use
+    --gray-200: #ebebeb;
+    --gray-300: #D9D9D9;
+    --gray-400: #cccccc;
+    --gray-500: #8B8B8B;
+    --gray-600: #666666;
+    --gray-700: #444444;
+    --gray-800: #333333;
+    --gray-900: #000000; // no use
+    --content-padding:#{$panelContentPadding};
+    --inline-spacing:#{$inlineSpacing};
+    --border-radius:#{$borderRadius};
+    --surface-ground:#f8f9fa;
+    --surface-section:#ffffff;
+    --surface-card:#ffffff;
+    --surface-overlay:#ffffff;
+    --surface-border:#dee2e6;
+    --surface-hover:#e9ecef;
+    --focus-ring: #{$focusShadow};
+    --maskbg: #{$maskBg};
+    --highlight-bg: #{$highlightBg};
+    --highlight-text-color: #{$highlightTextColor};
+    color-scheme: light;
+    --linear-gradient-start: #8FC7C6;
+    --linear-gradient-end: #B864D1;
+}

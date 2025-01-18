@@ -1,0 +1,349 @@
+JAPANESE,ENGLISH
+英語,ENGLISH
+v{version},v{version}
+データなし,No Data.
+申し訳ありませんが、それを行うにはサインインする必要があります。,"Sorry, you need to be signed-in to do that."
+セッションが無効になりました。再度ログインしてください。,Your session has expired. Please log in again.
+API Error,API Error
+円,円
+USD,USD
+イベント一覧に戻る,Return to the Event Listing
+残り時間: {countdown},Time remaining: {countdown}
+イベントID: {ticker},ID: {ticker}
+最大リターン: {max},Maximum Return: {max}
+最大レバレッジ: {leverage}倍,Maximum Leverage: {leverage}x
+詳しく見る,Detailed View
+おすすめイベント,Recommended Events
+ホーム,Home
+マイページ,Portfolio
+探す,Search
+通知,Notifications
+ログイン,Login
+あなたの予想は？,What do you predict?
+確率,Probability
+予測収益,Indicative Return
+最終収益率,Final Return
+チャート,Chart
+クォート,Quote Recap
+クォートなし,No quotes available.
+指標的なリターン,Indicative Return
+取引数,Trade Volume
+確率,Probability
+指標的なリターン,Indicative Return
+ベッティング,Betting
+掛金、レバレッジの設定,"Wager, Leverage setting"
+{name}さんの利用可能残高: {balance},{name}’s available balance: {balance}
+掛金,Wager
+掛金の上限: {max},Maximum permittable wager: {max}
+レバレッジ,Leverage
+指示停止確率,Indicative Stop Level
+示唆的な支払,Potential Payout
+新しい確率,New Probability
+現在の引用の市場影響度（{marketImpact}）が警告レベル（{warningLevel}）を超えています。,The market impact ({marketImpact}) of the wager exceeds the warning threshold ({warningLevel}).
+ベットする,Proceed with the bet
+注文の確認,Order Confirmation
+元の掛金,Wager amount
+利用レバレッジ,Leverage used
+賞金,Indicative Payout
+掛けの開始日時,Time of wager placement
+指示停止確率,Indicative Stop Level
+マーケットインパク,Market Impact
+ご注文確定後は、購入商品の金額がお客様のアカウントから引き落とされます。注文内容をよくご確認いただき、誤りがないことをご確認ください。なお、注文後のキャンセルや返品はできませんので、ご注意ください。ご了承いただける場合は、最終チェックアウトをお願いいたします。,"Once your order is confirmed, the amount of the purchased item will be debited from your account. Please check your order carefully and make sure there are no errors. Please note that orders cannot be canceled or returned after the order has been placed. If you agree, please proceed."
+注文が実行されると、\n資金がアカウントから引き落とされます。,"Once the order is executed, \nfunds will be debited from your account."
+注文を確定する,Proceed with wager
+注文をキャンセルする,Cancel this wager
+注文が完了できませんでした。,Could not place wager.
+注文が完了しました。,Wager successfully placed.
+注文成功！,Success!
+同じイベントを更に見る,Return to this event
+注文失敗！,Problem with your wager!
+エラー \n口座残高を確認する,"Error\nInsufficient funds, check your account."
+マイページ,My Page
+入金する,Deposit page
+イベントに戻る,Return to the event
+注文失敗！,Problem with your wager!
+エラー \nログインする必要,Error\nyou must be logged in to do that.
+イベント・サーチ,Event Search
+特別の特徴,Special Features
+カテゴリー,Category
+順カテゴリー,Sub-category
+クリア,Clear
+検索,Search
+結果がない,No results
+結果,Results
+最新順,Most recent
+24時間の取引量,24hr trading volume
+残り時間,Remaining Time
+作成からの経過時間,Elapsed Time Since Creation
+参加トレーダー数,Number of Traders
+最大リターン（収益）,Maximum Return
+最小リターン（収益）,Minimum Return
+最大レバレッジ（倍率）,Maximum Leverage
+最近取引された,Recently Traded
+有効期限までの時間,Time until Expiration
+最大利益,Largest Profit
+最大ベット,Biggest Wager
+最大リターン,Highest Return
+Preferences Page,
+ユーザー設定,User settings
+通知,Notifications
+イベントは間もなく終了します！,Event is ending soon!
+警告を停止してください！,Stop warning!
+停止がトリガーされました！,Stop triggered!
+あなたは勝者です！,You\'ve won!
+イベントは終了しました。,Event has ended.
+イベントは解決しました。,Event has resolved.
+新しいイベントがここにあります！,A new event is available here.
+EveryX アプリのアップデート!,There is an update available.
+あなたの預金は保留中です。,Your deposit is on hold.
+お引き出しは保留中です。,Your withdrawal is pending.
+入金成功！,Deposit successful!
+引き出し成功！,Withdrawal successful!
+入金に問題がありました。,There was a problem with your deposit.
+引き出しに問題がありました。,There was a problem with your withdrawal.
+実績のロックが解除されました！,Achievement unlocked!
+レベルアップしました！,You have levelled up!
+あなたは上位 n ％にいます！,You are in the top n%!
+新しいフォロワーがいます！,You have new followers.
+あなたはコメントでタグ付けされました！,You were tagged in a comment.
+誰かがあなたのコメントに返信しました！,Someone has replied to your comment.
+新しいメッセージがあります！,There is a new notification!
+賭け金,Wager
+デフォルトの賭け金サイズ,Default wager size
+デフォルトのレバレッジ,Default leverage
+市場への影響警告レベル,Market Impact Warning Level
+お気に入り,Favorites
+その他,Other
+日本語,Japanese
+ログインの立ち直り,Login Recovery
+新しいパスワード,New Password
+パスワードの確認,Confirm your password
+新しいパスワードの確認,Confirm your new password
+パスワードが一致しません,Passwords don\'t match
+パスワードをセットする,Set Password
+必要なフィールドを入力してください,Please fill in all the required fields.
+パスワードが要件を満たしていません,The password entered does not meet the requirements.
+パスワードのリセットに失敗しました。トークンが有効であることを確認してください。,Password reset has failed.
+有効なメールアドレスを入力してください,Please enter a valid email address
+＊：必要,Required.
+パスワードの設定は完了です,Password Reset
+ログインを最初からやり直す,Back to the login screen
+メールアドレス,Email address
+パスワード,Password
+ログイン,Login
+パスワードの忘れた場合,Forgot your password?
+会員登録はまだされていませんか?,Not yet registered?
+無料会員登録はこちら,Register now
+キャンペーン中！,Campaign in progress
+メールアドレス・パスワードが一致しません。,Email address or password do not match
+確認の上、再入力をお願いします。,Please check and re-enter
+下のボタンを押すと、「パスワード・リセット」のリンクがメールアドレスに通信されます。,A link to reset your password will be sent to your registered email address.
+パスワードのリセットを行う,Reset yor password
+パスワード・リセット」のリンクがメールアドレスに通信しましたので、インボックスの確認をお願いします。,A link to reset your password has been sent to your email address.
+ログインを最初からやり直す,Back to the login screen.
+アカウントの作成,Create an account
+（10～32文字）,(10-32 characters)
+少なくとも 1 つの大文字、1 つの小文字、\nおよび 1 つの数字を含める必要があります。,"At least one uppercase letter, one lowercase letter, and must contain one number."
+紹介コード（もしあれば）,Referral code
+アカウントを作成する,Create account
+すすむ,Proceed
+利用規約の賛成,Accept the Terms of Use
+プライバシーポリシーの賛成,Accept the Privacy Policy
+同意します。,Agree.
+アカウントの作成が成功です。<br><br>EveryXへようこそ！,Account created successfully. <br><br>Welcome to EveryX!
+アカウントの作成,Create an account
+ホーム,Home
+ログアウト,Log out
+ログアウトしてもよろしいですか？,Are you sure you want to log out?
+ログアウトする,Log out
+戻る,Return / go back
+正常にログアウトしました。,Successfully logged out
+ホーム,Home
+アカウント修理,Account
+公開情報,Publicly Visible
+ライブラリから選ぶ,Upload a profile picture
+写真を撮る,Take a picture
+ニックネーム,Nickname
+公開情報を変更する,Update Account Information
+プロフィールが更新されました,Profile Updated
+連絡先,Contact Address
+メールアドレス,Email address
+未確認,Unconfirmed
+メールアドレスが確認されていないため、サイトの機能が制限されています。,Your email address is not verified. Site functionality may be limited.
+メールアドレスの確認を行う,Confirm your email address
+確認メールが送信されました。,A confirmation email has been sent.
+ログイン認証,Login authentication
+パスワードの変更を行う,Change your password
+パスワードの設定は完了です。,Password Reset Complete
+本人確認,Confirm your identity
+未確認,Unconfirmed
+本人確認手続きが済ましていないため、サイトの機能が制限されています。,Identity verification incomplete - site functionality may be limited.
+本人確認手続きを行う,Get KYC Verified!
+再認証を行う,Re-verify KYC.
+紹介コード,Referral Code
+有効期限: {date},Expiration date: {date}
+残りの利用数: {count}回,Remaining number of uses: {count} times
+コピーが成功しました。,Copied successfully!
+コピーに失敗しました。,Copy failed.
+クリップボードにコピーする,Copy to clipboard
+連絡先,Contact address
+確認済,Confirmed
+本人確認,Identification
+確認済,Confirmed
+入金と出金ができます,You can now deposit and withdraw funds.
+本人確認,Identification
+確認中,Confirming…
+確認が終わったら、メールで通知します。<br>少々お待ちください。,"Once confirmation is complete, we will notify you by email."
+紹介コード,Referral code
+只今紹介コードはございません,There are no referral codes available currently.
+本人確認,Identification
+確認済,Confirmed
+入金と出金ができます。,You can now deposit and withdraw funds.
+メールアドレスを確認するリンクを<br>{email}<br>へ通信しました。<br><br>インボックスへ移動して、リンクをクリックしてください。,A link to confirm your email address has been sent to <br>{email}. <br><br>Please check your inbox.
+確認メールを再通信する,Re-send confirmation email
+メールアドレスの確認が完了です。,Email address confirmed!
+メールの確認に失敗しました。リンクの有効期限が切れました。,Email address confirmation failed.
+メールの確認に失敗しました。メールアドレスが一致しません。,Email address confirmation failed.
+パスワードの変更,Change password
+パスワードを変更する,Change password
+パスワードの変更が成功しました。,Password was successfully changed!
+パスワードの変更に失敗しました。,Failed to change password.
+メールアドレスの確認が完了です,Your email address has been confirmed
+本人確認手続き,Identity verification procedure
+入金・出金,Deposit / Withdrawal
+アカウント,Account
+設定,Settings
+ヘルプ,Help
+プライバシーポリシー,Privacy Policy
+利用規約,Terms of Use
+企業情報,Company Profile
+サインイン,Sign-in
+サインアウト,Sign-out
+入出金履歴,Deposit & Withdrawal History
+日付,Date
+出金/入金金額,Withdrawal/Deposit Amount
+お取引内容,Transaction Details
+入金する,Make a deposit
+出金する,Make a withdrawal
+入金・出金,Deposit / Withdrawal
+入出金履歴を見る,View deposit / withdrawal history
+アカウント状態によっては一部の操作が制限されることに注意してください。,Please note that some operations may be restricted depending on your account status
+入金手続,Deposit procedure
+入金金額の入力,Enter deposit amount
+入金の最低金額は{min}になります,The minimum deposit amount is {min}
+支払い方法を選択,Select payment method
+銀行振込,Bank Transfer
+クレジットカード,Credit Card
+仮想通貨,Cryptocurrency
+外部サイトに飛びます,You will be taken to an external site.
+＊ 最大入金額は{max}です ＊,The maximum deposit amount is {max}
+＊ 最低入金額は{min}です ＊,The minimum deposit amount is {min}
+ビットコイン (BTC),Bitcoin
+エーテル (ETH),Ethereum
+銀行名,Bank Name
+支店,Bank Branch
+口座番号,Account number
+普通,Regular
+貯金,Savings
+銀行に登録されている名前,Name registered with Bank.
+クレジットカード番号,Credit card number
+有効期限,Expiration date
+カードの名前,Name on credit card
+入金処理中,Deposit Processing
+入出金履歴を見る,View deposit / withdrawal history
+マイページ,My page
+入金がキャンセルされました,Deposit canceled.
+入金に失敗しました,Deposit failed.
+お支払い方法を選択してください。,Please select the payment method.
+金額を入力してください。,Please enter the amount.
+お金が足りません。預け入れにリダイレクトします。,Insufficient funds. Redirecting you to Deposits.
+引き出しを行う前に、メールアドレスの確認をお願いします。,Please verify your identity before processing a withdrawal.
+入金を行う前に、メールアドレスの確認をお願いします。,Please confirm your email address before making a deposit.
+{field}は必須項目です,{field} is required.
+暗号資産の種類を選択してください,Please select the type of cryptocurrency.
+送金先の暗号資産アドレスを入力してください,Please enter the wallet address.
+出金手続,Withdrawal Procedure
+出金金額の入力,Enter withdrawal amount
+出金の最大金額は{max}になります,The maximum withdrawal amount is {max}
+出金方法を選択,Select withdrawal method
+出金する,Make a withdrawal
+＊ 最大出金額は{max}です ＊,Maximum withdrawal amount is {max}
+＊ 最低出金額は{min}です ＊,Minimum withdrawal amount is {min}
+ウォレットアドレス,Wallet address
+出金がキャンセルされました,Withdrawal Cancelled
+出金処理中,Withdrawal is processing
+出金に失敗しました,Withdrawal failed
+よくある質問,FAQ
+イベント,Events
+お問い合わせ,Inquiry
+疑問が解決しない場合、\nお問い合わせフォームまたは\nチャットでもお問い合わせ可能です。,"If your question remains unanswered, use the contact form. You can also contact us via Chat."
+詳しく見る,See details
+ユーザーネーム,Username
+トロフィー,Trophies
+ランク,Rank
+勝率,Win Rate
+リターン,Return
+最良のシナリオ,Best case scenario
+期待値のシナリオ,Expected value scenario
+最良の賞金(合計),Best Case Total Reward
+最良の現金残高,Best Case Cash Balance
+期待値の賞金（合計）,Expected Total Reward
+期待値の現金残高,Expected Cash Balance
+1日間の変化,1 day change
+現在の現金残高,Current Cash Balance
+累計損益,Cumulative Profit
+チャート,Chart
+データ,Data
+現金残高,Cash Balance
+掛金履歴,Wager History
+アクティブ,Active
+インアクティブ,Inactive
+終了,Finished
+利益と損失,Profit and Loss
+発生確率,Outcome Probability
+入出金履歴,Deposit and Withdrawal history
+賭け履歴なし,No wager history.
+申し込み日:,Date of wager
+賭け金:,Wager amount
+実現リターン: {amount},Realized return: {amount}
+予想リターン: {amount},Predicted return: {amount}
+イベント詳細,Event Details
+別の賭けをする,Make Another Wager
+終了,Finished
+支払い額,Payout amount
+終了日時,Termination Date
+終了理由,Termination Reason
+最良の場合,Best Case
+予想される,Anticipated
+利用可能,Available
+日次損失,Daily Losses
+日次利益,Daily Gains
+実現利益,Realized Gains
+未払いの賭け金,Outstanding Wagers
+証拠金の預け入れ,Margin Deposits
+レバレッジ比率,Leverage Ratio
+Notifications,
+通知・インボックス,Notifications / inbox
+消した通知を含む,Include deleted notifications
+まだ通知はありません,No notifications.
+この通知はメールアドレスにも送ってあります。,This notification is also sent to your email address.
+アーカイブが成功しました。,Archived successfully!
+アーカイブ解除に成功しました,Successfully unarchived.
+既読に設定,Mark as read.
+未読に設定,Mark as unread.
+,
+最後の賭けの時間,Time of Last Wager
+解決の時間,Time of Resolution
+現金使用量,Cash Used
+解決結果,Actual Outcome
+利用不可,Cannot be used
+結果の確率,Outcome probability
+利用可能残高,Available Balance
+選択してください,Please make a selection
+私たちとチャットしよう,Chat with us
+設定を保存する,Save settings
+設定が更新されました,Preferences updated
+賭け金は返金されました,Wager Refunded
+賭け金は返金\nされました,Wager\nRefunded
+賭け金は返金されました。\n詳細はこちらをご覧ください。,Your wager has been refunded.\nSee details here.
+賭け金は返金されました。,Your wager has\nbeen refunded

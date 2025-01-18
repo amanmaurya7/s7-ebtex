@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 160 160" style="enable-background:new 0 0 160 160;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+</style>
+<path class="st0" d="M144,160H16c-8.8,0-16-7.2-16-16V16C0,7.2,7.2,0,16,0h128c8.8,0,16,7.2,16,16v128C160,152.8,152.8,160,144,160z
+	 M144,72h-16.7c-1.2-7.3-4.1-14-8.2-19.8l11.8-11.8l-11.3-11.3l-11.8,11.8c-5.8-4.1-12.5-7-19.8-8.2V16H72v16.7
+	c-7.3,1.2-14,4.1-19.8,8.2L40.4,29.1L29.1,40.4l11.8,11.8c-4.1,5.8-7,12.5-8.2,19.8H16v16h16.7c1.2,7.3,4.1,14,8.2,19.8l-11.8,11.8
+	l11.3,11.3l11.8-11.8c5.8,4.1,12.5,7,19.8,8.2V144h16v-16.7c7.3-1.2,14-4.1,19.8-8.2l11.8,11.8l11.3-11.3l-11.8-11.8
+	c4.1-5.8,7-12.5,8.2-19.8H144V72z M80,112c-17.7,0-32-14.3-32-32s14.3-32,32-32s32,14.3,32,32S97.7,112,80,112z"/>
+</svg>

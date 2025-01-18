@@ -1,0 +1,103 @@
+/* Customizations to the designer theme should be defined here */
+
+// ----- slider ----- //
+.p-slider.p-disabled {
+  background-color: var(--gray-600) !important;
+}
+
+// ----- button ----- //
+.p-button.p-disabled {
+  background-color: var(--gray-300) !important;
+  color: var(--gray-600) !important;
+  border-color: var(--gray-600) !important;
+}
+
+
+// ----- input group ----- //
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+
+  label {
+    font-size: .875rem;
+
+    &.required::after {
+      content: '＊';
+      color: var(--red-500);
+      vertical-align: super;
+      font-size: .75rem;
+    }
+  }
+
+  .error-hint {
+    color: var(--red-500);
+    text-align: right;
+    font-size: .75rem;
+  }
+}
+
+// ----- divider ----- //
+.p-divider::before {
+  border-top-color: #000 !important;
+}
+
+// ----- dropdown ----- //
+.p-dropdown.filter {
+  min-width: 120px;
+
+  .p-dropdown-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gray-700);
+  }
+}
+
+.p-dropdown-panel.filter {
+  font-size: 0.875rem;
+}
+
+// ----- progress spinner ----- //
+.p-progress-spinner {
+  margin: auto;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+// ----- others ----- //
+.white-space-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.white-space-break-spaces {
+  white-space: break-spaces;
+}
+
+#scroll-wrapper {
+  overflow-y: auto;
+}
+
+#observer-target {
+  height: .5rem;
+}
+
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--lightgray-500);
+  color: #000;
+  font-size: 1.75rem;
+}
+
+.wager-refunded {
+  background-color: var(--red-500);
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+  padding: .25rem .5rem;
+  text-align: center;
+  font-size: .75rem;
+}

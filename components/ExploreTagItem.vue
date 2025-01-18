@@ -1,0 +1,60 @@
+<script setup>
+
+const props = defineProps({
+    tag: {
+        type: Object,
+        required: true,
+    },
+});
+</script>
+
+<template>
+  <div class="tag-item p-ripple" :class="{ disabled: props.tag.num_events === 0 }">
+    <img src="/images/v1.5/icon-tag-green.png" width="12" height="12">
+    <div class="tag-name">
+      {{ props.tag.name }}
+    </div>
+    <div class="tag-event-count">
+      {{ props.tag.num_events }}
+    </div>
+  </div>
+</template>
+
+
+<style lang="scss" scoped>
+.tag-item {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  font-size: 0.9rem;
+  font-weight: bold;;
+  text-align: center;
+  background-color: var(--w2-500);
+  border-radius: 5px;
+  padding: 1rem;
+  width: 100%;
+  gap: 0.5rem;
+
+  &.disabled {
+    opacity: 0.2;
+  }
+}
+
+
+.tag-event-count {
+  background: var(--m4-500);
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: white;
+  border-radius: 5px;
+}
+
+</style>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 160 160" style="enable-background:new 0 0 160 160;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#004D4D;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#00E6E6;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#008080;}
+</style>
+<g>
+	<g>
+		<polygon class="st0" points="64,16 0,80 0,144 96,144 160,80 160,16 		"/>
+	</g>
+</g>
+<path class="st1" d="M96,160H16V0h128v112L96,160z"/>
+<path class="st2" d="M105,105L93.2,93.1C89.2,95,84.7,96,80,96c-4.7,0-9.1-1-13.1-2.8L55,105c-13.8-8.4-23-23.6-23-41
+	c0-26.5,21.5-48,48-48c26.5,0,48,21.5,48,48C128,81.3,118.8,96.5,105,105z M80,40c-13.3,0-24,10.7-24,24s10.7,24,24,24
+	s24-10.7,24-24S93.3,40,80,40z"/>
+<path class="st3" d="M32,128h64l-16,16H32V128z"/>
+</svg>

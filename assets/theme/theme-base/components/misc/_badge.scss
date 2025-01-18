@@ -1,0 +1,61 @@
+.p-badge {
+    background: $badgeBg;
+    color: $badgeTextColor;
+    font-size: $badgeFontSize;
+    font-weight: $badgeFontWeight;
+    padding: 0rem 0.3125rem;
+    height: $badgeHeight;
+    line-height: $badgeHeight;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &.p-badge-secondary {
+        background-color: $secondaryButtonBg;
+        color: $secondaryButtonTextColor;
+    }
+
+    &.p-badge-success {
+        background-color: $successButtonBg;
+        color: $successButtonTextColor;
+    }
+
+    &.p-badge-info {
+        background-color: $infoButtonBg;
+        color: $infoButtonTextColor;
+    }
+
+    &.p-badge-warning {
+        background-color: $warningButtonBg;
+        color: $warningButtonTextColor;
+    }
+
+    &.p-badge-danger {
+        background-color: $dangerButtonBg;
+        color: $dangerButtonTextColor;
+    }
+
+    &.p-badge-m4 {
+        background-color: var(--m4-500);
+        color: var(--text-color);
+    }
+
+    &.p-badge-m5 {
+        background-color: var(--m5-500);
+        color: var(--text-color);
+    }
+
+    &.p-badge-lg {
+        font-size: 1.5 * $badgeFontSize;
+        min-width: 1.5 * $badgeMinWidth;
+        height: 1.5 * $badgeHeight;
+        line-height: 1.5 * $badgeHeight;
+    }
+
+    &.p-badge-xl {
+        font-size: 2 * $badgeFontSize;
+        min-width: 2 * $badgeMinWidth;
+        height: 2 * $badgeHeight;
+        line-height: 2 * $badgeHeight;
+    }
+}
