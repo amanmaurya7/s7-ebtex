@@ -153,5 +153,35 @@ defineProps({
       gap: .5rem;
     }
   }
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+
+    .card-image {
+      flex: 0 0 auto;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    
+    .card-content {
+      align-items: center;
+      text-align: center;
+
+      .event-title {
+        font-size: 1.25rem;
+      }
+
+      .event-description {
+        font-size: 1rem;
+      }
+
+      .stat {
+        justify-content: center;
+      }
+    }
+  }
 }
 </style>

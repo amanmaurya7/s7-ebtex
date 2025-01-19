@@ -4,20 +4,34 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    autoplayInterval: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const container = ref(null);
 const currentPage = ref(0);
 const touchStart = ref(null);
 const touchEnd = ref(null);
+const currentSlide = ref(0);
+const timer = ref(null);
 
 const goToPage = (page) => {
     if (!container.value) return;
 
-    const parent = container.value;
-    const target = parent.children[page % parent.children.length];
+    const totalPages = props.items.length;
+    // Handle circular navigation
+    if (page >= totalPages) {
+        page = 0;
+    } else if (page < 0) {
+        page = totalPages - 1;
+    }
 
-    const offset = target.offsetLeft - 20;
+    const parent = container.value;
+    const target = parent.children[page];
+
+    const offset = target.offsetLeft - (window.innerWidth > 1024 ? 40 : 20);
 
     container.value.scrollTo({
         left: offset,
@@ -53,6 +67,25 @@ const handleTouchEnd = (e) => {
     touchStart.value = null;
     touchEnd.value = null;
 };
+
+// Update watch effect for currentSlide
+watch(currentSlide, (newValue) => {
+    goToPage(newValue);
+});
+
+onMounted(() => {
+    if (props.autoplayInterval > 0) {
+        timer.value = setInterval(() => {
+            currentSlide.value = (currentSlide.value + 1) % props.items.length;
+        }, props.autoplayInterval);
+    }
+});
+
+onUnmounted(() => {
+    if (timer.value) {
+        clearInterval(timer.value);
+    }
+});
 </script>
 
 <template>
@@ -105,6 +138,12 @@ const handleTouchEnd = (e) => {
     -ms-overflow-style: none;
     padding: 0 20px;
     align-items: center;
+    transition: all 0.5s ease-in-out;
+
+    @media (min-width: 1024px) {
+        gap: 40px;
+        padding: 0 40px;
+    }
 
     &::-webkit-scrollbar {
         display: none;
@@ -114,6 +153,12 @@ const handleTouchEnd = (e) => {
 .carousel-item {
   flex: 0 0 90%;
   width: 90%;
+  transition: transform 0.5s ease-in-out;
+
+  @media (min-width: 1024px) {
+    flex: 0 0 80%;
+    width: 80%;
+  }
 }
 
 .carousel-pagination {
