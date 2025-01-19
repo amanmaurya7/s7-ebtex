@@ -88,6 +88,29 @@ const backgroundTinted = {
       padding: 1rem 0rem 0;
       text-align: center;
   }
+
+  @media (min-width: 1024px) {
+    max-width: 400px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .image {
+      aspect-ratio: 400 / 260;
+    }
+
+    .card-content {
+      padding: 1.5rem 0rem 0;
+    }
+
+    .event-title {
+      font-size: 1.25rem;
+      padding: 0 2rem;
+    }
+  }
 }
 
 .info-row {
@@ -143,6 +166,12 @@ const backgroundTinted = {
     height: 44px;
     width: 1px;
     margin: 0 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    .stat-number {
+      font-size: 1.25rem;
+    }
   }
 }
 

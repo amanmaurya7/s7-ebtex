@@ -111,11 +111,36 @@ const isInSignupPage = computed(() => {
   .btn-login {
     min-width: 90px;
   }
+
+  @media (min-width: 1024px) {
+    padding: 0.625rem 2.5rem;
+    height: 70px;
+
+    .logo {
+      position: static;
+      height: 40px;
+    }
+
+    .right-items {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+  }
 }
 
 .top-nav-button {
   border: none;
   background: transparent;
+  
+  @media (min-width: 1024px) {
+    padding: 0.5rem;
+    
+    img {
+      width: 26px;
+      height: 26px;
+    }
+  }
 }
 
 .badge {

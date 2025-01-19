@@ -60,5 +60,22 @@ const filteredRows = computed(() => {
   &.divider {
     border-bottom: .5px solid #000;
   }
+
+  @media (min-width: 1024px) {
+    padding: 1rem 1.5rem;
+    
+    .flex {
+      gap: 1rem;
+    }
+
+    img {
+      width: 48px;
+      height: 48px;
+    }
+
+    .text-sm {
+      font-size: 1rem;
+    }
+  }
 }
 </style>

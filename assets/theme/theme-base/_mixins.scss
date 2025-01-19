@@ -4,6 +4,24 @@
 	}
 }
 
+
+// Ensure the mixin is defined in your mixins.scss file
+
+@mixin respond-to($breakpoint) {
+
+    @if $breakpoint == 'lg' {
+  
+      @media (min-width: 1024px) {
+  
+        @content;
+  
+      }
+  
+    }
+  
+  }
+  
+
 @mixin focused() {
 	outline: $focusOutline;
     outline-offset: $focusOutlineOffset;

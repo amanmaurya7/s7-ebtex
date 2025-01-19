@@ -84,7 +84,6 @@ section {
   position: relative;
   padding: 0 !important;
   background: url(/images/v1.5/bg-landing-top.png) no-repeat center/280%, linear-gradient(var(--m1-500) 0%, #073c3b 75%, #073c3b 100%);
-
   margin-bottom: 0rem;
 
   .banners-item {

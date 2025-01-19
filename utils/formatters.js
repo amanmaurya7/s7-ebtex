@@ -102,4 +102,4 @@ export const formatDuration = (duration, language, mode = DURATION_MODE.COMPACT)
             spacer: '',
         });
     }
-}
+};

@@ -97,6 +97,27 @@ const backgroundTinted = {
     .card-content {
         padding: 1rem;
     }
+
+    @media (min-width: 1024px) {
+      &:hover {
+        transform: translateY(-2px);
+        transition: transform 0.2s ease;
+      }
+
+      .image {
+        width: 180px;
+        min-height: 180px;
+      }
+
+      .card-content {
+        padding: 1.5rem;
+        width: 100%;
+      }
+
+      .event-title {
+        font-size: 1.25rem;
+      }
+    }
 }
 
 .info-row {
@@ -139,6 +160,14 @@ const backgroundTinted = {
     height: 40px;
     width: 1px;
     margin: 0 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 400px;
+
+    .stat-number {
+      font-size: 1.125rem;
+    }
   }
 }
 

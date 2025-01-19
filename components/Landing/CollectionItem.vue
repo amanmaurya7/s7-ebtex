@@ -50,12 +50,27 @@ const containerStyle = computed(() => {
   height: 150px;
   overflow: hidden;
   border-radius: 10px 0px 0px 10px;
+
+  @media (min-width: 1024px) {
+    height: 180px;
+    border-radius: 15px 0px 0px 15px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
 }
 
 .collection-image {
   width: 150px;
   height: 150px;
   object-fit: cover;
+
+  @media (min-width: 1024px) {
+    width: 180px;
+    height: 180px;
+  }
 }
 
 .collection-name {
@@ -76,6 +91,11 @@ const containerStyle = computed(() => {
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 1.5rem 2rem;
+    font-size: 1.125rem;
   }
 }
 
