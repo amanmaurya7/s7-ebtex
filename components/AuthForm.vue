@@ -150,12 +150,34 @@ const onClickSubmit = async () => {
 </template>
 
 <style lang="scss" scoped>
+.auth-form {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 :deep(.form-group) {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
   position: relative;
   padding-top: 1.5rem;
+
+  @media (min-width: 768px) {
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+}
+
+.input-group {
+  @media (min-width: 768px) {
+    margin-bottom: 0.5rem;
+    
+    label {
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+  }
 }
 
 .required-hint {
@@ -164,5 +186,18 @@ const onClickSubmit = async () => {
   top: .25rem;
   right: 0;
   font-size: 0.875rem;
+
+  @media (min-width: 768px) {
+    top: 1rem;
+    right: 1.5rem;
+  }
+}
+
+:deep(.p-button) {
+  @media (min-width: 768px) {
+    max-width: 320px;
+    margin: 0 auto;
+    display: block;
+  }
 }
 </style>

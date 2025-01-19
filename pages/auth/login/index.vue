@@ -153,19 +153,44 @@ const onTabClick = (event) => {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.custom-p-tabview {
+  max-width: 768px;
+  margin: 0 auto;
 }
 
 :deep(.p-card) {
   margin: 0 1.25rem;
+  
+  @media (min-width: 768px) {
+    margin: 0 auto;
+    max-width: 640px;
+  }
 }
 
-
-.lock-icon {
-  margin-right: 0.4rem;
-  transform: rotate(270deg)
+.auth-secondary-bottom-button {
+  @media (min-width: 768px) {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
 }
 
 :deep(.password-input input) {
   color: var(--m4-500);
+}
+
+.lock-icon {
+  margin-right: 0.4rem;
+  transform: rotate(270deg);
+}
+
+:deep(.p-tabview-panels) {
+  @media (min-width: 768px) {
+    padding: 1rem 2rem;
+  }
 }
 </style>

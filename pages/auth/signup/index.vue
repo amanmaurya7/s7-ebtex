@@ -125,7 +125,7 @@ watch(validationErrors, (newValue) => {
             if (item.ref.value && validationErrors.value[item.field]) {
                 item.ref.value.$el.scrollIntoView({
                     behavior: 'smooth',
-                    block: 'start'
+                    block: 'start',
                 });
                 return;
             }
@@ -380,12 +380,28 @@ const onPhoneNumberVerified = () => {
 </template>
 
 <style lang="scss" scoped>
+.custom-p-tabview {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
 :deep(.p-card), section {
   margin: 0 1.25rem;
+  
+  @media (min-width: 768px) {
+    margin: 0 auto;
+    max-width: 640px;
+  }
 }
 
 .terms-section {
   padding: 1.5rem 1rem 0;
+  max-width: 768px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 
   .terms-content {
     padding: 2rem 1.5rem;
@@ -393,16 +409,28 @@ const onPhoneNumberVerified = () => {
     border-radius: 0.5rem;
     max-height: 45vh;
     overflow-y: auto;
-  }
 
+    @media (min-width: 768px) {
+      max-height: 60vh;
+      padding: 2.5rem;
+    }
+  }
 }
 
 :deep(.password-input .bubble) {
   margin-left: -1rem;
   margin-right: -1rem;
+
+  @media (min-width: 768px) {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 480px;
+  }
 }
 
-:deep(.p-dropdown-item) {
-  text-align: left !important;
+.text-center {
+  @media (min-width: 768px) {
+    margin-top: 2rem;
+  }
 }
 </style>
