@@ -30,7 +30,7 @@ const params = computed(() => {
     } else if (props.systemTag) {
         tags.push(props.systemTag.slug);
     }
-
+    
     if (selectedCategorySlugs.value.length) {
         tags.push(...selectedCategorySlugs.value);
     }

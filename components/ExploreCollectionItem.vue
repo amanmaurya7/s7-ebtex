@@ -34,13 +34,34 @@ const props = defineProps({
 .collection-item {
   display: flex;
   width: 100%;
+  background: var(--w2-500);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  @media (min-width: 1024px) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+      .collection-image {
+        transform: scale(1.05);
+      }
+    }
+  }
 }
 
 .collection-image {
   width: 100px;
   min-height: 100px;
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 10px 0 0 10px;
   object-fit: cover;
+  transition: transform 0.3s ease;
+
+  @media (min-width: 1024px) {
+    width: 160px;  // reduced from 200px
+    min-height: 120px;  // reduced from 150px
+  }
 }
 
 .collection-count {
@@ -57,16 +78,28 @@ const props = defineProps({
 }
 
 .collection-name {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 1.5rem 1rem;
-    background: var(--w2-500);
-    font-size: 0.9375rem;;
-    font-weight: bold;
-    text-transform: uppercase;
-    gap: 8px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  background: var(--w2-500);
+  font-size: 0.9375rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  gap: 8px;
+
+  @media (min-width: 1024px) {
+    padding: 1.5rem;  // reduced from 2rem
+    font-size: 1.125rem;  // reduced from 1.25rem
+  }
+}
+
+.collection-event-count {
+  @media (min-width: 1024px) {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
 }
 
 .right-part {

@@ -37,7 +37,17 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .category-item {
-    /* Add your styles for the category item here */
+    background: var(--w2-500);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    @media (min-width: 1024px) {
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+    }
 }
 
 .category-banner {
@@ -48,8 +58,16 @@ const props = defineProps({
 
     .banner-image {
         width: 100%;
-        aspect-ratio: 2;
+        aspect-ratio: 16/9;
         object-fit: cover;
+        transition: transform 0.3s ease;
+
+        @media (min-width: 1024px) {
+            aspect-ratio: 21/9;
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
     }
 }
 
@@ -62,6 +80,11 @@ const props = defineProps({
     font-weight: bold;
     text-transform: uppercase;
     gap: 8px;
+
+    @media (min-width: 1024px) {
+        font-size: 1.25rem;
+        padding: 1.5rem;
+    }
 }
 
 .category-event-count{
@@ -77,6 +100,13 @@ const props = defineProps({
     display: flex;
     flex-direction: column;
     padding: 0rem .5rem;
+
+    @media (min-width: 1024px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 1.5rem;
+    }
 }
 
 .sub-tag {
@@ -88,6 +118,17 @@ const props = defineProps({
 
     &:last-child {
         border-bottom: none;
+    }
+
+    @media (min-width: 1024px) {
+        border: 1px solid var(--m3-a20);
+        border-radius: 8px;
+        padding: 1rem;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: var(--m3-a20);
+        }
     }
 }
 </style>

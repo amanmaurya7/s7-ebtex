@@ -22,7 +22,7 @@ prepareCategories();
 </script>
 
 <template>
-  <div>
+  <div class="explore-categories-container">
     <Loading v-if="isLoading" />
     <div class="categories-wrapper">
       <NuxtLink
@@ -42,9 +42,43 @@ prepareCategories();
 </template>
 
 <style lang="scss" scoped>
+.explore-categories-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @media (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
 .categories-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 3rem;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    
+    @media (min-width: 1024px) {
+      opacity: 1;
+      transition: opacity 0.2s ease;
+      
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
 }
 </style>

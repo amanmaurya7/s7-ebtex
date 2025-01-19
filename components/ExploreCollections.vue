@@ -18,9 +18,9 @@ prepareCollections();
 </script>
 
 <template>
-  <div>
+  <div class="explore-collections-container">
     <Loading v-if="isLoading" />
-    <div class="categories-wrapper">
+    <div class="collections-wrapper">
       <NuxtLink
         v-for="collection in collections"
         :key="collection.id"
@@ -37,9 +37,34 @@ prepareCollections();
 </template>
 
 <style lang="scss" scoped>
-.categories-wrapper {
-    display: flex;
-    flex-direction: column;
+.explore-collections-container {
+  max-width: 1080px;  // reduced from 1280px
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @media (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
+.collections-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    
+    a {
+      opacity: 1;
+      transition: opacity 0.2s ease;
+      
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
 }
 </style>

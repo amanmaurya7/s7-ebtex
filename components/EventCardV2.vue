@@ -99,23 +99,29 @@ const backgroundTinted = {
     }
 
     @media (min-width: 1024px) {
+      border: 1px solid var(--m3-a20);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
       &:hover {
-        transform: translateY(-2px);
-        transition: transform 0.2s ease;
+        transform: translateY(-4px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       }
 
       .image {
-        width: 180px;
-        min-height: 180px;
+        width: 240px;
+        min-height: 200px;
       }
 
       .card-content {
-        padding: 1.5rem;
-        width: 100%;
+        padding: 2rem;
       }
 
       .event-title {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
       }
     }
 }
@@ -138,6 +144,11 @@ const backgroundTinted = {
       color: var(--text-color); 
       text-transform: uppercase;
     }
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 14px;
+    margin: 1rem 0 1.5rem;
   }
 }
 
@@ -165,8 +176,17 @@ const backgroundTinted = {
   @media (min-width: 1024px) {
     max-width: 400px;
 
+    .event-stat-item {
+      font-size: 0.75rem;
+    }
+
     .stat-number {
-      font-size: 1.125rem;
+      font-size: 1.25rem;
+    }
+
+    .separator {
+      margin: 0 2rem;
+      height: 50px;
     }
   }
 }
