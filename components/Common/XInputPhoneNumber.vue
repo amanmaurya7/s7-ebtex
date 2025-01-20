@@ -112,11 +112,11 @@ const countryCallingCode = computed(() => {
     display: block;
     font-size: 1.125rem;
     font-weight: bold;
-    width: calc(100vw - 3rem);
+    width: 100%;
     padding-left: 0.2rem;
     border-radius: 0;
-
     border-bottom: 2px solid var(--m3-a20);
+
     &:focus {
         outline: none;
         box-shadow: none !important;
@@ -130,6 +130,16 @@ const countryCallingCode = computed(() => {
     align-self: center;
     padding: 2px 4px;
     border-radius: 4px;
+}
+
+.phone-number-input {
+    flex: 1; 
+    width: auto;
+}
+
+.flex {
+    display: flex;
+    width: 100%;
 }
 
 .x-input-wrapper .hint-container {
