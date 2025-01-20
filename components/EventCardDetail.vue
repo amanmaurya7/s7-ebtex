@@ -67,6 +67,9 @@ const backgroundTinted = {
   overflow: hidden;
   border-bottom: 1px solid var(--m3-500);
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
 
   .event-title {
     font-size: 1.25rem;

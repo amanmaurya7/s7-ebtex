@@ -154,338 +154,344 @@ const onLeverageTooltipHide = () => {
 
 <template>
   <div v-if="event" class="event">
-    <section v-if="!isDepositingToOutcome && navigationItems.length > 0" class="navigations">
-      <div v-for="(item, i) in navigationItems" :key="i" class="navigation-item" @click="onNavigationItemClick(item)">
-        <img class="navigation-item-icon" :src="item.iconUrl" alt="navigation icon">
-        <div class="uppercase">
-          {{ item.label }}
+    <div class="event-container">
+      <section v-if="!isDepositingToOutcome && navigationItems.length > 0" class="navigations">
+        <div v-for="(item, i) in navigationItems" :key="i" class="navigation-item" @click="onNavigationItemClick(item)">
+          <img class="navigation-item-icon" :src="item.iconUrl" alt="navigation icon">
+          <div class="uppercase">
+            {{ item.label }}
+          </div>
+          <Badge :value="item.count" class="p-badge-m5" />
+          <div class="flex-grow-1" />
+          <img class="navigation-item-chevron" src="/images/v1.5/icon-chevron-right.png" alt="navigation icon">
         </div>
-        <Badge :value="item.count" class="p-badge-m5" />
-        <div class="flex-grow-1" />
-        <img class="navigation-item-chevron" src="/images/v1.5/icon-chevron-right.png" alt="navigation icon">
-      </div>
-    </section>
-    <section v-if="!isDepositingToOutcome" class="event-detail">
-      <EventCardDetail :event="event" tint-hex="#00b3b3" />
-    </section>
+      </section>
+      
+      <div class="desktop-layout">
+        <div class="desktop-left-column">
+          <section v-if="!isDepositingToOutcome" class="event-detail">
+            <EventCardDetail :event="event" tint-hex="#00b3b3" />
+          </section>
 
-    <section class="event-options" :class="{'pt-2': isDepositingToOutcome}">
-      <h3 class="event-options-title">
-        {{ $t(isDepositingToOutcome ? 'event_detail.deposit_options_title' : 'event_detail.options_title') }}
-      </h3>
-      <EventOutcomeSelectV2
-        v-model="selectedOutcome"
-        :show-only-selected-option="isDepositingToOutcome"
-        :options="outcomeOptions"
-        :active-position-outcome-map="activePositionOutcomeMap"
-        :new-bet-type-map="newBetTypeMap"
-        :tint-for-selected-option="currentQuote?.leverage > 1 ? '#ffaa00' : '#ffffff'"
-      />
-    </section>
-
-    <div v-if="hasActivePosition" class="px-4 b-m3-a20 mx-100 pt-3 pb-2 border-radius-6px font-75 text-center text-white mb-200 flex align-items-center justify-content-center gap-2">
-      <div class="active-position-indicator" />
-      <span class="uppercase" v-html="$t('event_detail.active_position_indicator_message')" />
-    </div>
-    <div v-else class="mb-200" />
-
-    <Accordion
-      class="charts-accordion"
-      expand-icon="pi pi-chevron-down"
-      collapse-icon="pi pi-chevron-up"
-      :active-index="activeChartIndex"
-      @tab-open="chartAccordionOpened = true"
-      @tab-close="chartAccordionOpened = false"
-    >
-      <AccordionTab>
-        <template #header>
-          <div class="accordion-header">
-            {{ $t( chartAccordionOpened ? 'event_detail.hide_bet_statistics' : 'event_detail.show_bet_statistics') }}
-          </div>
-        </template>
-        <TabView>
-          <TabPanel>
-            <template #header>
-              <span class="chart-title">
-                {{ $t('event_detail.chart_title.outcome_probability') }}
-              </span>
-            </template>
-            <Loading v-if="isFetchingChartData" class="text-white" style="background-color: var(--black-500);" />
-            <div v-else-if="rawChartData" class="bg-black-500">
-              <div class="static-chart-tooltip font-75 px-4 py-3 bb-m3-a20 text-center text-white bg-black-500" v-html="$t(selectedOutcome ? 'event_detail.probability_chart_desc_selected_outcome' : 'event_detail.probability_chart_desc_all_outcomes')" />
-              <ProbabilityChart
-                :key="selectedOutcome?._id"
-                :data="rawChartData"
-                :selected-outcome="selectedOutcome"
-                :stop-level="(currentQuote?.after_stop_probability || 0) * 100"
-                :fill-stop-level="currentQuote?.leverage > 1"
-                :event-outcome-ids="event.outcomes.map((o) => o._id)"
-                now-line-color="white"
-                chart-focus-color="#00e6e6"
-              />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <template #header>
-              <span class="chart-title">
-                {{ $t('event_detail.chart_title.indicative_return') }}
-              </span>
-            </template>
-            <Loading v-if="isFetchingChartData" class="text-white" style="background-color: var(--black-500);" />
-            <div v-else-if="rawChartData" class="bg-black-500">
-              <div class="static-chart-tooltip font-75 px-4 py-3 bb-m3-a20 text-center text-white bg-black-500" v-html="$t(selectedOutcome ? 'event_detail.return_chart_desc_selected_outcome' : 'event_detail.return_chart_desc_all_outcomes')" />
-              <ReturnChart
-                :key="selectedOutcome?._id"
-                :data="rawChartData"
-                :selected-outcome="selectedOutcome"
-                :event-outcome-ids="event.outcomes.map((o) => o._id)"
-              />
-            </div>
-          </TabPanel>
-        </TabView>
-      </AccordionTab>
-    </Accordion>
-
-    <section v-if="event.status === 'open' && selectedOutcome" class="event-betting">
-      <div class="bg-white px-3">
-        <div class="font-bold uppercase text-center bet-slipping" style="font-size: 1.375rem;" v-html="$t('event_detail.wager_slip')" />
-      </div>
-
-      <div class="betting-form">
-        <Bubble class="quick-bet-wrapper">
-          <template v-for="(option, i) in quickPledgeOptions" :key="option.value">
-            <div
-              class="quick-bet-option"
-              :class="{
-                'quick-bet-selected': option.value === formData.pledge,
-                'quick-bet-not-selected': option.value !== formData.pledge,
-                disabled: option.disabled,
-                'after-selected': i > 0 && quickPledgeOptions[i - 1].value === formData.pledge,
-                'before-selected': i < quickPledgeOptions.length - 1 && quickPledgeOptions[i + 1].value === formData.pledge,
-              }"
-              @click="onQuickPledge(option)"
-            >
-              {{ option.label }}
-            </div>
-          </template>
-        </Bubble>
-
-        <div class="input-group wager-input-group px-3">
-          <div class="flex align-items-center justify-content-between">
-            <div class="input-label">
-              {{ $t('investment.pledge') }}
-            </div>
-            <div class="input-info uppercase">
-              <span>{{ $t('event_detail.your_cash_bet') }}</span>
-              <span
-                v-if="userInfo && typeof balance === 'number'"
-                class="separator"
-              />
-              <Tooltip v-if="userInfo && typeof balance === 'number'" mode="dark" :tooltip-content="$t('betting.your_cash_bet_tooltip')">
-                <span
-                  class="max-wager"
-                  v-html="$t('event_detail.max_wager', { max: formatAmount(Math.min(balance, currentQuote?.max_pledge), 2) })"
-                />
-              </Tooltip>
-            </div>
-          </div>
-          <div class="input-wrapper">
-            <InputNumber
-              v-model="formData.pledge"
-              class="pledge-input"
-              input-id="pledge"
-              :min="minPledge"
-              :max="maxPledge"
-              variant="filled"
-              :disabled="!selectedOutcome"
-              :step="0.1"
-              @focus="$event.target.select()"
-              @keyup.enter="$event.target.blur()"
+          <section class="event-options" :class="{'pt-2': isDepositingToOutcome}">
+            <h3 class="event-options-title">
+              {{ $t(isDepositingToOutcome ? 'event_detail.deposit_options_title' : 'event_detail.options_title') }}
+            </h3>
+            <EventOutcomeSelectV2
+              v-model="selectedOutcome"
+              :show-only-selected-option="isDepositingToOutcome"
+              :options="outcomeOptions"
+              :active-position-outcome-map="activePositionOutcomeMap"
+              :new-bet-type-map="newBetTypeMap"
+              :tint-for-selected-option="currentQuote?.leverage > 1 ? '#ffaa00' : '#ffffff'"
             />
-            <Slider
-              v-model="formData.pledge"
-              :min="minPledge"
-              :max="maxPledge"
-              :step="0.1"
-              class="mt-3"
-              :disabled="!selectedOutcome"
-            />
-          </div>
+          </section>
         </div>
 
-
-        <div v-if="!isDepositingToOutcome" class="input-group-separator" />
-
-        <div id="leverage-tooltip" style="margin: -1rem 0;" />
-
-        <div v-if="!isDepositingToOutcome" class="input-group leverage-input-group mt-1 px-3">
-          <div class="flex align-items-center justify-content-between">
-            <div class="input-label">
-              {{ $t('investment.leverage') }}
+        <div class="desktop-right-column">
+          <section v-if="event.status === 'open' && selectedOutcome" class="event-betting">
+            <div class="bg-white px-3">
+              <div class="font-bold uppercase text-center bet-slipping" style="font-size: 1.375rem;" v-html="$t('event_detail.wager_slip')" />
             </div>
-            <div class="input-info uppercase">
-              <span>{{ $t('event_detail.your_cash_multiplier') }}</span>
-              <span
-                v-if="userInfo && typeof balance === 'number'"
-                class="separator"
-              />
 
-              <VerticalTooltip
-                v-if="delayMountFilled"
-                ref="leverageTooltipRef"
-                tooltip-teleport-target="#leverage-tooltip"
-                :disabled="!userInfo || typeof balance !== 'number' || maxLeverage >= 10"
-                @show="onLeverageTooltipShow"
-                @hide="onLeverageTooltipHide"
-              >
-                <div>
-                  <span
-                    v-if="userInfo && typeof balance === 'number' && maxLeverage >= 10"
-                    class="max-wager"
-                    v-html="$t('event_detail.max_leverage', { max: maxLeverage })"
-                  />
-                  <span
-                    v-else-if="userInfo && typeof balance === 'number'"
-                    class="max-wager"
-                    :class="{'underline-dotted': !leverageTooltipActive, 'underline-red': leverageTooltipActive}"
-                    v-html="$t('event_detail.max_leverage_limited', { max: maxLeverage })"
-                  />
-                </div>
-                <template #tooltip>
-                  <Bubble class="quick-bet-wrapper">
-                    <WarningText
-                      class="limited-leverage-warning-text-tooltip"
-                      :warning-wording="$t('betting.limited_leverage_available')"
-                      :message="$t('betting.limited_leverage_warning')"
-                      :message-on-second-line="true"
-                      :message-in-bold="false"
-                    />
-                  </Bubble>
+            <div class="betting-form">
+              <Bubble class="quick-bet-wrapper">
+                <template v-for="(option, i) in quickPledgeOptions" :key="option.value">
+                  <div
+                    class="quick-bet-option"
+                    :class="{
+                      'quick-bet-selected': option.value === formData.pledge,
+                      'quick-bet-not-selected': option.value !== formData.pledge,
+                      disabled: option.disabled,
+                      'after-selected': i > 0 && quickPledgeOptions[i - 1].value === formData.pledge,
+                      'before-selected': i < quickPledgeOptions.length - 1 && quickPledgeOptions[i + 1].value === formData.pledge,
+                    }"
+                    @click="onQuickPledge(option)"
+                  >
+                    {{ option.label }}
+                  </div>
                 </template>
-              </VerticalTooltip>
-            </div>
-          </div>
+              </Bubble>
 
-          <div class="input-wrapper">
-            <InputNumber
-              v-model="formData.leverage"
-              class="leverage-input"
-              input-id="leverage"
-              :step="0.1"
-              :max-fraction-digits="1"
-              :min="1"
-              :max="maxLeverage"
-              :disabled="maxLeverage <= 1 || !selectedOutcome"
-              @focus="$event.target.select()"
-              @keyup.enter="$event.target.blur()"
-            />
-            <CustomSlider
-              v-if="maxLeverage > 1"
-              v-model="formData.leverage"
-              class="mt-3"
-              :disabled="maxLeverage <= 1 || !selectedOutcome"
-              :min="1"
-              :max="10"
-              :step="0.1"
-              :max-mark-value="maxLeverage"
-              @change="onLeverageChange"
-            />
-          </div>
-        </div>
-
-        <div class="input-group-separator" />
-
-        <div class="result">
-          <div v-show="isFetchingDynamicIndicator" class="quote_loading_mask">
-            <ProgressSpinner animation-duration=".8s" stroke-width="4" />
-          </div>
-
-          <div v-if="dynamicIndicator" class="flex justify-content-center">
-            <template v-for="(item, index) in dynamicIndicator" :key="item.name">
-              <div class="result-field">
-                <Tooltip v-if="item.tooltip" mode="dark" :tooltip-content="item.tooltip">
-                  <div class="result-field-label text-center" v-html="item.name" />
-                </Tooltip>
-                <div v-else class="result-field-label text-center" v-html="item.name" />
-                <div class="result-field-value text-center">
-                  {{ item.value }}
+              <div class="input-group wager-input-group px-3">
+                <div class="flex align-items-center justify-content-between">
+                  <div class="input-label">
+                    {{ $t('investment.pledge') }}
+                  </div>
+                  <div class="input-info uppercase">
+                    <span>{{ $t('event_detail.your_cash_bet') }}</span>
+                    <span
+                      v-if="userInfo && typeof balance === 'number'"
+                      class="separator"
+                    />
+                    <Tooltip v-if="userInfo && typeof balance === 'number'" mode="dark" :tooltip-content="$t('betting.your_cash_bet_tooltip')">
+                      <span
+                        class="max-wager"
+                        v-html="$t('event_detail.max_wager', { max: formatAmount(Math.min(balance, currentQuote?.max_pledge), 2) })"
+                      />
+                    </Tooltip>
+                  </div>
                 </div>
-                <div v-if="item.percentage !== null" class="result-field-change text-center">
-                  {{ item.percentage }}
+                <div class="input-wrapper">
+                  <InputNumber
+                    v-model="formData.pledge"
+                    class="pledge-input"
+                    input-id="pledge"
+                    :min="minPledge"
+                    :max="maxPledge"
+                    variant="filled"
+                    :disabled="!selectedOutcome"
+                    :step="0.1"
+                    @focus="$event.target.select()"
+                    @keyup.enter="$event.target.blur()"
+                  />
+                  <Slider
+                    v-model="formData.pledge"
+                    :min="minPledge"
+                    :max="maxPledge"
+                    :step="0.1"
+                    class="mt-3"
+                    :disabled="!selectedOutcome"
+                  />
                 </div>
               </div>
-              <div v-if="index !== dynamicIndicator.length - 1" class="separator" style="margin: 0 2rem;" />
-            </template>
-          </div>
-        </div>
 
-        <div class="input-group-separator" />
 
-        <div v-if="shouldWarnMarketImpactWarning" class="market-impact-warning">
-          {{ marketImpactWarningText }}
-        </div>
+              <div v-if="!isDepositingToOutcome" class="input-group-separator" />
 
-        <div v-if="debuggingInfo" class="text-xs white-space-break-spaces">
-          <hr>
-          {{ JSON.stringify(debuggingInfo, null, "\t") }}
-        </div>
+              <div id="leverage-tooltip" style="margin: -1rem 0;" />
 
-        <div v-if="!userInfo">
-          <WarningText :message="$t('betting.you_are_not_signed_in')" />
-          <GradientButtonNext :label="$t('betting.sign_in_to_proceed')" @click="onSubmitBet" />
-          <div class="text-center font-bold mt-3 font-9375">
-            {{ $t('betting.wager_will_be_saved_for_five_minutes') }}
-          </div>
-        </div>
-        <div v-else-if="!userInfo.email_verified" class="text-center">
-          <WarningText :message="$t('betting.email_not_verified')" />
-          <GradientButtonNext :label="$t('betting.verify_email_to_proceed')" @click="onSubmitBet" />
-          <div class="text-center font-bold mt-3 font-9375">
-            {{ $t('betting.wager_will_be_saved_for_five_minutes') }}
-          </div>
-        </div>
-        <div v-else-if="balance - formData.pledge < 0">
-          <BalanceChangeText :from="balance" :to="balance - formData.pledge" />
-          <WarningText v-if="balance - formData.pledge < 0" class="mt-3" :message="$t('betting.you_dont_have_sufficient_funds')" />
-          <GradientButtonNext
-            tint="yellow"
-            :label="$t('betting.make_a_deposit_to_proceed')"
-            :disabled="!selectedOutcome || !currentQuote || isFetchingDynamicIndicator"
-            @click="onSubmitBet"
-          />
-          <div class="text-center font-bold mt-3 font-9375">
-            {{ $t('betting.wager_will_be_saved_for_five_minutes') }}
-          </div>
-        </div>
-        <div v-else>
-          <BalanceChangeText :from="balance" :to="balance - formData.pledge" />
-          <GradientButtonNext
-            tint="yellow"
-            :label="$t(selectedOutcome ? 'event_detail.bet' : 'error.please_make_a_selection')"
-            :disabled="!selectedOutcome || !currentQuote || isFetchingDynamicIndicator"
-            @click="onSubmitBet"
-          />
+              <div v-if="!isDepositingToOutcome" class="input-group leverage-input-group mt-1 px-3">
+                <div class="flex align-items-center justify-content-between">
+                  <div class="input-label">
+                    {{ $t('investment.leverage') }}
+                  </div>
+                  <div class="input-info uppercase">
+                    <span>{{ $t('event_detail.your_cash_multiplier') }}</span>
+                    <span
+                      v-if="userInfo && typeof balance === 'number'"
+                      class="separator"
+                    />
+
+                    <VerticalTooltip
+                      v-if="delayMountFilled"
+                      ref="leverageTooltipRef"
+                      tooltip-teleport-target="#leverage-tooltip"
+                      :disabled="!userInfo || typeof balance !== 'number' || maxLeverage >= 10"
+                      @show="onLeverageTooltipShow"
+                      @hide="onLeverageTooltipHide"
+                    >
+                      <div>
+                        <span
+                          v-if="userInfo && typeof balance === 'number' && maxLeverage >= 10"
+                          class="max-wager"
+                          v-html="$t('event_detail.max_leverage', { max: maxLeverage })"
+                        />
+                        <span
+                          v-else-if="userInfo && typeof balance === 'number'"
+                          class="max-wager"
+                          :class="{'underline-dotted': !leverageTooltipActive, 'underline-red': leverageTooltipActive}"
+                          v-html="$t('event_detail.max_leverage_limited', { max: maxLeverage })"
+                        />
+                      </div>
+                      <template #tooltip>
+                        <Bubble class="quick-bet-wrapper">
+                          <WarningText
+                            class="limited-leverage-warning-text-tooltip"
+                            :warning-wording="$t('betting.limited_leverage_available')"
+                            :message="$t('betting.limited_leverage_warning')"
+                            :message-on-second-line="true"
+                            :message-in-bold="false"
+                          />
+                        </Bubble>
+                      </template>
+                    </VerticalTooltip>
+                  </div>
+                </div>
+
+                <div class="input-wrapper">
+                  <InputNumber
+                    v-model="formData.leverage"
+                    class="leverage-input"
+                    input-id="leverage"
+                    :step="0.1"
+                    :max-fraction-digits="1"
+                    :min="1"
+                    :max="maxLeverage"
+                    :disabled="maxLeverage <= 1 || !selectedOutcome"
+                    @focus="$event.target.select()"
+                    @keyup.enter="$event.target.blur()"
+                  />
+                  <CustomSlider
+                    v-if="maxLeverage > 1"
+                    v-model="formData.leverage"
+                    class="mt-3"
+                    :disabled="maxLeverage <= 1 || !selectedOutcome"
+                    :min="1"
+                    :max="10"
+                    :step="0.1"
+                    :max-mark-value="maxLeverage"
+                    @change="onLeverageChange"
+                  />
+                </div>
+              </div>
+
+              <div class="input-group-separator" />
+
+              <div class="result">
+                <div v-show="isFetchingDynamicIndicator" class="quote_loading_mask">
+                  <ProgressSpinner animation-duration=".8s" stroke-width="4" />
+                </div>
+
+                <div v-if="dynamicIndicator" class="flex justify-content-center">
+                  <template v-for="(item, index) in dynamicIndicator" :key="item.name">
+                    <div class="result-field">
+                      <Tooltip v-if="item.tooltip" mode="dark" :tooltip-content="item.tooltip">
+                        <div class="result-field-label text-center" v-html="item.name" />
+                      </Tooltip>
+                      <div v-else class="result-field-label text-center" v-html="item.name" />
+                      <div class="result-field-value text-center">
+                        {{ item.value }}
+                      </div>
+                      <div v-if="item.percentage !== null" class="result-field-change text-center">
+                        {{ item.percentage }}
+                      </div>
+                    </div>
+                    <div v-if="index !== dynamicIndicator.length - 1" class="separator" style="margin: 0 2rem;" />
+                  </template>
+                </div>
+              </div>
+
+              <div class="input-group-separator" />
+
+              <div v-if="shouldWarnMarketImpactWarning" class="market-impact-warning">
+                {{ marketImpactWarningText }}
+              </div>
+
+              <div v-if="debuggingInfo" class="text-xs white-space-break-spaces">
+                <hr>
+                {{ JSON.stringify(debuggingInfo, null, "\t") }}
+              </div>
+
+              <div v-if="!userInfo">
+                <WarningText :message="$t('betting.you_are_not_signed_in')" />
+                <GradientButtonNext :label="$t('betting.sign_in_to_proceed')" @click="onSubmitBet" />
+                <div class="text-center font-bold mt-3 font-9375">
+                  {{ $t('betting.wager_will_be_saved_for_five_minutes') }}
+                </div>
+              </div>
+              <div v-else-if="!userInfo.email_verified" class="text-center">
+                <WarningText :message="$t('betting.email_not_verified')" />
+                <GradientButtonNext :label="$t('betting.verify_email_to_proceed')" @click="onSubmitBet" />
+                <div class="text-center font-bold mt-3 font-9375">
+                  {{ $t('betting.wager_will_be_saved_for_five_minutes') }}
+                </div>
+              </div>
+              <div v-else-if="balance - formData.pledge < 0">
+                <BalanceChangeText :from="balance" :to="balance - formData.pledge" />
+                <WarningText v-if="balance - formData.pledge < 0" class="mt-3" :message="$t('betting.you_dont_have_sufficient_funds')" />
+                <GradientButtonNext
+                  tint="yellow"
+                  :label="$t('betting.make_a_deposit_to_proceed')"
+                  :disabled="!selectedOutcome || !currentQuote || isFetchingDynamicIndicator"
+                  @click="onSubmitBet"
+                />
+                <div class="text-center font-bold mt-3 font-9375">
+                  {{ $t('betting.wager_will_be_saved_for_five_minutes') }}
+                </div>
+              </div>
+              <div v-else>
+                <BalanceChangeText :from="balance" :to="balance - formData.pledge" />
+                <GradientButtonNext
+                  tint="yellow"
+                  :label="$t(selectedOutcome ? 'event_detail.bet' : 'error.please_make_a_selection')"
+                  :disabled="!selectedOutcome || !currentQuote || isFetchingDynamicIndicator"
+                  @click="onSubmitBet"
+                />
+              </div>
+            </div>
+          </section>
         </div>
       </div>
-    </section>
-    <div>
-      <Accordion
-        v-if="!isDepositingToOutcome"
-        class="quotes-accordion"
-        expand-icon="pi pi-chevron-down"
-        collapse-icon="pi pi-chevron-up"
-        @tab-open="quoteAccordionOpened = true"
-        @tab-close="quoteAccordionOpened = false"
-      >
-        <AccordionTab>
-          <template #header>
-            <div class="accordion-header">
-              {{ $t(quoteAccordionOpened ? 'event_detail.hide_bet_recap' : 'event_detail.show_bet_recap') }}
-            </div>
-          </template>
-          <BetRecapTable :bets="recapBets" />
-        </AccordionTab>
-      </Accordion>
+
+      <div class="desktop-charts-section">
+        <Accordion
+          class="charts-accordion"
+          expand-icon="pi pi-chevron-down"
+          collapse-icon="pi pi-chevron-up"
+          :active-index="activeChartIndex"
+          @tab-open="chartAccordionOpened = true"
+          @tab-close="chartAccordionOpened = false"
+        >
+          <AccordionTab>
+            <template #header>
+              <div class="accordion-header">
+                {{ $t( chartAccordionOpened ? 'event_detail.hide_bet_statistics' : 'event_detail.show_bet_statistics') }}
+              </div>
+            </template>
+            <TabView>
+              <TabPanel>
+                <template #header>
+                  <span class="chart-title">
+                    {{ $t('event_detail.chart_title.outcome_probability') }}
+                  </span>
+                </template>
+                <Loading v-if="isFetchingChartData" class="text-white" style="background-color: var(--black-500);" />
+                <div v-else-if="rawChartData" class="bg-black-500">
+                  <div class="static-chart-tooltip font-75 px-4 py-3 bb-m3-a20 text-center text-white bg-black-500" v-html="$t(selectedOutcome ? 'event_detail.probability_chart_desc_selected_outcome' : 'event_detail.probability_chart_desc_all_outcomes')" />
+                  <ProbabilityChart
+                    :key="selectedOutcome?._id"
+                    :data="rawChartData"
+                    :selected-outcome="selectedOutcome"
+                    :stop-level="(currentQuote?.after_stop_probability || 0) * 100"
+                    :fill-stop-level="currentQuote?.leverage > 1"
+                    :event-outcome-ids="event.outcomes.map((o) => o._id)"
+                    now-line-color="white"
+                    chart-focus-color="#00e6e6"
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <template #header>
+                  <span class="chart-title">
+                    {{ $t('event_detail.chart_title.indicative_return') }}
+                  </span>
+                </template>
+                <Loading v-if="isFetchingChartData" class="text-white" style="background-color: var(--black-500);" />
+                <div v-else-if="rawChartData" class="bg-black-500">
+                  <div class="static-chart-tooltip font-75 px-4 py-3 bb-m3-a20 text-center text-white bg-black-500" v-html="$t(selectedOutcome ? 'event_detail.return_chart_desc_selected_outcome' : 'event_detail.return_chart_desc_all_outcomes')" />
+                  <ReturnChart
+                    :key="selectedOutcome?._id"
+                    :data="rawChartData"
+                    :selected-outcome="selectedOutcome"
+                    :event-outcome-ids="event.outcomes.map((o) => o._id)"
+                  />
+                </div>
+              </TabPanel>
+            </TabView>
+          </AccordionTab>
+        </Accordion>
+      </div>
+
+      <div>
+        <Accordion
+          v-if="!isDepositingToOutcome"
+          class="quotes-accordion"
+          expand-icon="pi pi-chevron-down"
+          collapse-icon="pi pi-chevron-up"
+          @tab-open="quoteAccordionOpened = true"
+          @tab-close="quoteAccordionOpened = false"
+        >
+          <AccordionTab>
+            <template #header>
+              <div class="accordion-header">
+                {{ $t(quoteAccordionOpened ? 'event_detail.hide_bet_recap' : 'event_detail.show_bet_recap') }}
+              </div>
+            </template>
+            <BetRecapTable :bets="recapBets" />
+          </AccordionTab>
+        </Accordion>
+      </div>
     </div>
   </div>
 </template>
@@ -505,6 +511,7 @@ section {
 }
 
 .event-options {
+
   .event-options-title {
     text-align: center;
     color: white;
@@ -826,5 +833,148 @@ section {
   left: calc(50% - 5px);
   border-left: 1px solid var(--m3-a20);
   border-bottom: 1px solid var(--m3-a20);
+}
+
+.event-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  @media (min-width: 1024px) {
+    padding: 2rem;
+  }
+}
+
+.desktop-layout {
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1000px;
+    align-items: center;
+    margin-left: 290px;
+    
+    .event-detail, .event-options {
+      
+      margin: 0 auto;
+    }
+  }
+}
+
+.desktop-left-column {
+  @media (min-width: 1024px) {
+    position: sticky;
+    top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    
+    .event-detail, .event-options {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+}
+
+.desktop-right-column {
+  @media (min-width: 1024px) {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.desktop-charts-section {
+  @media (min-width: 1024px) {
+    margin-top: 2rem;
+    
+    :deep(.chart) {
+      aspect-ratio: 21/9;
+      max-height: 500px;
+    }
+  }
+}
+
+.event-betting {
+  @media (min-width: 1024px) {
+    border-radius: 12px;
+    
+    .betting-form {
+      padding: 1.5rem;
+    }
+    
+    .quick-bet-wrapper {
+      margin: 0;
+    }
+  }
+}
+
+.navigations {
+  @media (min-width: 1024px) {
+    padding: 0;
+    margin: 0 0 2rem;
+    
+    .navigation-item {
+      padding: 1rem;
+      font-size: 0.875rem;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+.event-options {
+  @media (min-width: 1024px) {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px; // Add max-width to contain the content
+    margin: 0 auto; // Center the section horizontally
+    
+    .event-options-title {
+      font-size: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center; // Ensure title is centered
+    }
+
+    :deep(.event-outcome-select) {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+}
+
+.result {
+  @media (min-width: 1024px) {
+    .result-field {
+      .result-field-value {
+        font-size: 2.25rem;
+      }
+      .result-field-change {
+        font-size: 1.125rem;
+      }
+    }
+  }
+}
+
+:deep(.charts-accordion), :deep(.quotes-accordion) {
+  @media (min-width: 1024px) {
+    border: 1px solid var(--m3-a20);
+    border-radius: 12px;
+    overflow: hidden;
+    
+    .p-accordion-content {
+      padding: 1.5rem;
+    }
+  }
 }
 </style>
