@@ -23,13 +23,19 @@
 <style lang="scss" scoped>
 .page-footer {
     background-color: black;
-    padding: 5px 20px;
+    padding: 20px 10px; 
     text-align: center;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
 }
 
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .footer-logo {
@@ -46,6 +52,8 @@
     font-weight: bold;
     color: white;
     margin: 20px 0;
+    text-align: center;  // Ensure text is centered
+    width: 100%;        // Full width for proper centering
 
     @media (min-width: 768px) {
         font-size: 1.2rem;
@@ -55,6 +63,8 @@
 
 .bottom-text-links {
     color: white;
+    text-align: center;  // Ensure text is centered
+    width: 100%;        // Full width for proper centering
 }
 
 .text-link {
