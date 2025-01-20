@@ -69,61 +69,70 @@ const backgroundTinted = {
 <style lang="scss" scoped>
 .card {
   position: relative;
-    display: flex;
-    text-decoration: none;
-    color: white;
-    user-select: none;
-    background: transparent;
+  display: flex;
+  text-decoration: none;
+  color: white;
+  user-select: none;
+  background: transparent;
 
-    &:first-child {
-      border-top: 1px solid var(--m3-a20);
-    }
+  &:first-child {
+    border-top: 1px solid var(--m3-a20);
+  }
 
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--m3-500);
-    }
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--m3-500);
+  }
 
-    .event-title {
-      font-weight: bold;
+  .event-title {
+    font-weight: bold;
+  }
+
+  .image {
+    width: 100px;
+    height: 100%;
+    min-height: 150px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .card-content {
+    padding: 1rem;
+    flex: 1;
+  }
+
+  @media (min-width: 1024px) {
+    border: 1px solid var(--m3-a20);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 200px; /* Fixed height for desktop */
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
     .image {
-        width: 100px;
-        min-height: 150px;
-        object-fit: cover;
-        object-position: center;
+      width: 200px;
+      height: 200px;
+      aspect-ratio: 1;
+      object-fit: contain;
+      object-position: center;
     }
 
     .card-content {
-        padding: 1rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    @media (min-width: 1024px) {
-      border: 1px solid var(--m3-a20);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .image {
-        width: 240px;
-        min-height: 200px;
-      }
-
-      .card-content {
-        padding: 2rem;
-      }
-
-      .event-title {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-      }
+    .event-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
+  }
 }
 
 .info-row {

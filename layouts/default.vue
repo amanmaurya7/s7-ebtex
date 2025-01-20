@@ -15,7 +15,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :style="wrapperStyle">
+  <div :style="wrapperStyle" class="min-h-screen">
     <TopNav />
     <div class="overflow-hidden">
       <div>
