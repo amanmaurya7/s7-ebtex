@@ -18,6 +18,9 @@ if (subcategorySlug) {
     subcategory = await (getTag(subcategorySlug.toUpperCase()).data);
 }
 
+import { computed } from 'vue';
+const hasEvents = computed(() => category.value?.num_events > 0);
+
 </script>
 
 <template>
@@ -28,11 +31,14 @@ if (subcategorySlug) {
         :category="category"
         :subcategory="subcategory"
       />
-      <SearchResultList
-        class="result-list"
-        :category="category"
-        :subcategory="subcategory"
-      />
+      <div class="result-list">
+        <NoEvents v-if="!hasEvents" />
+        <SearchResultList
+          v-else
+          :category="category"
+          :subcategory="subcategory"
+        />
+      </div>
     </div>
   </div>
 </template>
