@@ -67,6 +67,35 @@ const { topEvents, featuredEvents } = useHome();
   }
 }
 
+.featured-events-section {
+  background: var(--w2-500);
+  padding: 1rem;
+  
+  @media (min-width: 1024px) {
+    padding: 1.5rem 2rem;
+  }
+
+  .events-grid {
+    display: grid;
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr;  /* Changed to single column for desktop */
+      max-width: 800px;           /* Limit max width */
+      margin: 0 auto;  
+      margin-left: 465px;           /* Center the grid */
+      gap: 1.5rem;                /* Add space between cards if multiple */
+    }
+  }
+
+  .hidden-mobile {
+    display: none;
+    
+    @media (min-width: 1024px) {
+      display: block;
+    }
+  }
+}
+
 section {
   padding: 0 1rem;
   margin-bottom: 1rem; // Add spacing between sections
