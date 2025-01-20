@@ -22,16 +22,18 @@ if (subcategorySlug) {
 
 <template>
   <div v-if="category" class="result-container">
-    <SearchResultHeader
-      class="result-header"
-      :category="category"
-      :subcategory="subcategory"
-    />
-    <SearchResultList
-      class="result-list"
-      :category="category"
-      :subcategory="subcategory"
-    />
+    <div class="content-wrapper">
+      <SearchResultHeader
+        class="result-header"
+        :category="category"
+        :subcategory="subcategory"
+      />
+      <SearchResultList
+        class="result-list"
+        :category="category"
+        :subcategory="subcategory"
+      />
+    </div>
   </div>
 </template>
 
@@ -40,17 +42,34 @@ if (subcategorySlug) {
 .result-container {
     background: var(--m1-500);
     min-height: 60vh;
+    display: flex;
+    justify-content: center;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    position: relative;
 }
 
 .result-header {
     position: fixed;
     top: 60px;
-    width: 100vw;
+    width: 100%;
     background-color: white;
     z-index: 10;
+
+    @media (min-width: 1024px) {
+        width: 1200px;
+        padding: 0 2rem;
+    }
 }
 
 .result-list {
     padding-top: 60px;
+    
+    @media (min-width: 1024px) {
+        padding: 80px 2rem 2rem;
+    }
 }
 </style>
