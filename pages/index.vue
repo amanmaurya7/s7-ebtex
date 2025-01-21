@@ -32,7 +32,7 @@ const { topEvents, featuredEvents } = useHome();
               :collection="item"
             />
           </NuxtLink>
-        </template>
+        </template> 
       </CustomCarousel>
     </section>
 
