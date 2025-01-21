@@ -101,9 +101,8 @@ const backgroundTinted = {
   }
 
   @media (min-width: 1024px) {
-   
+   margin-top: 5px;
     overflow: hidden;
-    padding-top: 10px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: 200px;
 
@@ -117,15 +116,15 @@ const backgroundTinted = {
     }
 
     .card-content {
-      padding: 2rem;
+      
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+    
     }
 
     .event-title {
       font-size: 1.5rem;
-      margin-bottom: 1rem;
+      
     }
   }
 }
