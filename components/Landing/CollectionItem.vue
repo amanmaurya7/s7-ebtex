@@ -10,7 +10,8 @@ const props = defineProps({
     },
 });
 
-const dominantColor = ref('var(--m1-500)');
+const dominantColor = ref('rgba(0,0,0,0.7)');
+const secondaryColor = ref('rgba(0,0,0,0.4)');
 const collectionImage = ref(null);
 const imageLoaded = ref(false);
 const imageError = ref(false);
@@ -26,16 +27,15 @@ const onImageLoad = () => {
         ctx.drawImage(img, 0, 0);
         
         const rgb = colorThief.getColor(canvas);
-        dominantColor.value = `rgb(${rgb.join(',')})`;
+        dominantColor.value = `rgba(${rgb.join(',')}, 0.9)`;
+        secondaryColor.value = `rgba(${rgb.join(',')}, 0.5)`;
     } catch (error) {
         console.error('Error extracting color:', error);
-        dominantColor.value = 'var(--m1-500)';
     }
 };
 
 const onImageError = () => {
     imageError.value = true;
-    dominantColor.value = 'var(--m1-500)';
 };
 
 const imgSrc = computed(() => {
@@ -45,17 +45,15 @@ const imgSrc = computed(() => {
     return '/images/default-collection.jpg';
 });
 
-const containerStyle = computed(() => {
-    return {
-        backgroundColor: dominantColor.value,
-    };
-});
+const containerStyle = computed(() => ({
+    background: `linear-gradient(to right, ${dominantColor.value}, ${secondaryColor.value})`
+}));
 </script>
 
 <template>
-    <div class="collection-container">
-        <div class="collection-item p-ripple" :style="containerStyle">
-            <div class="image-container">
+    <div class="collection-item" :style="containerStyle">
+        <div class="content-wrapper">
+            <div class="image-wrapper">
                 <img 
                     ref="collectionImage"
                     class="collection-image"
@@ -63,18 +61,15 @@ const containerStyle = computed(() => {
                     :src="imgSrc"
                     @load="onImageLoad"
                     @error="onImageError"
+                    alt=""
                 />
             </div>
-            <div class="collection-content">
-                <div class="collection-name">
-                    <h3>{{ props.collection.name }}</h3>
-                </div>
-                <div class="collection-event-count">
-                    <Badge class="event-badge">
-                        {{ props.collection.num_events }}
-                    </Badge>
-                    <span class="event-text">{{ $t('general.events') }}</span>
-                    <img class="collection-icon" src="/images/v1.5/icon-collection.png" width="16" height="16">
+            <div class="details-wrapper">
+                <h3 class="collection-title">{{ props.collection.name }}</h3>
+                <div class="event-info">
+                    <Badge class="event-count">{{ props.collection.num_events }}</Badge>
+                    <span class="event-label">{{ $t('general.events') }}</span>
+                    <img class="collection-icon" src="/images/v1.5/icon-collection.png" width="16" height="16" alt="">
                 </div>
             </div>
         </div>
@@ -82,32 +77,37 @@ const containerStyle = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.collection-container {
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
 .collection-item {
-    display: flex;
-    border-radius: 15px;
+    border-radius: 12px;
     overflow: hidden;
-    background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    height: 120px;
+    transition: transform 0.2s ease;
+
+    @media (min-width: 1024px) {
+        height: 160px;
+        
+        &:hover {
+            transform: translateY(-2px);
+        }
     }
 }
 
-.image-container {
-    width: 120px;
-    height: 120px;
-    flex-shrink: 0;
-    
+.content-wrapper {
+    display: flex;
+    height: 100%;
+
     @media (min-width: 1024px) {
-        width: 140px;
-        height: 140px;
+        height: 150px;
+    }
+}
+
+.image-wrapper {
+    width: 120px;
+    height: 100%;
+    flex-shrink: 0;
+
+    @media (min-width: 1024px) {
+        width: 160px;
     }
 }
 
@@ -115,54 +115,69 @@ const containerStyle = computed(() => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: opacity 0.3s;
+    opacity: 0;
+
+    &.loaded {
+        opacity: 1;
+    }
 }
 
-.collection-content {
-    flex-grow: 1;
+.details-wrapper {
+    flex: 1;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.25rem;
-    background-color: rgba(255,255,255,0.1);
-}
+    // background: inherit;
+    background-color: rgba(0,0,0,0.7);
 
-.collection-name {
-    h3 {
-        color: white;
-        font-size: 1.125rem;
-        font-weight: 600;
-        margin: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+    @media (min-width: 1024px) {
+        padding: 1.5rem;
+        width: 500px;
     }
 }
 
-.collection-event-count {
+.collection-title {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+
+    @media (min-width: 1024px) {
+        font-size: 1.25rem;
+    }
+}
+
+.event-info {
     display: flex;
     align-items: center;
-    margin-top: 0.75rem;
-    
-    .event-badge {
-       
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 1rem;
-        font-size: 0.875rem;
-    }
-    
-    .event-text {
-        color: rgba(255,255,255,0.8);
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        margin-left: 0.5rem;
-    }
-    
-    .collection-icon {
-        margin-left: auto;
-        opacity: 0.8;
-    }
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.event-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+}
+
+.event-label {
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.collection-icon {
+    margin-left: auto;
+    opacity: 0.8;
 }
 </style>
 

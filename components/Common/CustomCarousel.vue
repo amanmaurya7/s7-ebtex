@@ -21,7 +21,6 @@ const goToPage = (page) => {
     if (!container.value) return;
 
     const totalPages = props.items.length;
-    // Handle circular navigation
     if (page >= totalPages) {
         page = 0;
     } else if (page < 0) {
@@ -30,8 +29,18 @@ const goToPage = (page) => {
 
     const parent = container.value;
     const target = parent.children[page];
-
-    const offset = target.offsetLeft - (window.innerWidth > 1024 ? 40 : 20);
+    
+    // Calculate center position
+    const containerWidth = parent.offsetWidth;
+    const itemWidth = target.offsetWidth;
+    const isLastItem = page === totalPages - 1;
+    
+    let offset = target.offsetLeft - (window.innerWidth > 1024 ? 40 : 20);
+    
+    // Adjust offset for last item to center it
+    if (isLastItem) {
+        offset = target.offsetLeft - (containerWidth - itemWidth) / 2;
+    }
 
     container.value.scrollTo({
         left: offset,
@@ -49,17 +58,15 @@ const handleTouchMove = (e) => {
     touchEnd.value = e.touches[0].clientX;
 };
 
-const handleTouchEnd = (e) => {
+const handleTouchEnd = () => {
     if (!touchStart.value || !touchEnd.value) return;
   
     const diff = touchStart.value - touchEnd.value;
   
-    if (Math.abs(diff) > 50) { // Minimum swipe distance
+    if (Math.abs(diff) > 50) {
         if (diff > 0 && currentPage.value < props.items.length - 1) {
-            // Swipe left - go next
             goToPage(currentPage.value + 1);
         } else if (diff < 0 && currentPage.value > 0) {
-            // Swipe right - go prev
             goToPage(currentPage.value - 1);
         }
     }
@@ -68,7 +75,6 @@ const handleTouchEnd = (e) => {
     touchEnd.value = null;
 };
 
-// Update watch effect for currentSlide
 watch(currentSlide, (newValue) => {
     goToPage(newValue);
 });
@@ -89,60 +95,57 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="carousel-wrapper">
-    <div 
-      ref="container"
-      class="carousel-container"
-      @touchstart="handleTouchStart"
-      @touchmove="handleTouchMove" 
-      @touchend="handleTouchEnd"
-    >
-      <div 
-        v-for="(item, index) in items"
-        :key="index"
-        class="carousel-item"
-      >
-        <slot name="item" :item="item" />
-      </div>
+    <div class="carousel-wrapper">
+        <div 
+            ref="container"
+            class="carousel-container"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove" 
+            @touchend="handleTouchEnd"
+        >
+            <div 
+                v-for="(item, index) in items"
+                :key="index"
+                class="carousel-item"
+            >
+                <slot name="item" :item="item" />
+            </div>
+        </div>
+        
+        <div class="carousel-pagination">
+            <div
+                v-for="(_, index) in items"
+                :key="index"
+                class="pagination-dot"
+                :class="{ current: currentPage === index }"
+                @click="goToPage(index)"
+            />
+        </div>
     </div>
-    
-    <div class="carousel-pagination">
-      <div
-        v-for="(_, index) in items"
-        :key="index"
-        class="pagination-dot"
-        :class="{ current: currentPage === index }"
-        @click="goToPage(index)"
-      />
-    </div>
-  </div>
 </template>
 
-<style scoped>
-.carousel-wrapper {
-    color: gray;
-    position: relative;
-    width: 100%;
-    overflow: visible;
-}
+<style lang="scss" scoped>
+
 
 .carousel-container {
-    touch-action: none;
     display: flex;
     width: 100%;
     overflow-x: scroll;
-    gap: 20px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0 20px;
-    align-items: center;
-    transition: all 0.5s ease-in-out;
+    gap: 1rem;
+    padding: 1rem;
+    padding-right: calc(50% - 160px);
+    margin-left: 10px;
 
     @media (min-width: 1024px) {
-        gap: 40px;
-        padding: 0 40px;
+       
+        max-width: 1400px;
+        margin: 0 auto;
+        margin-left: 85px;
+        padding-right: calc(50% - 400px);
     }
 
     &::-webkit-scrollbar {
@@ -151,37 +154,40 @@ onUnmounted(() => {
 }
 
 .carousel-item {
-  flex: 0 0 90%;
-  width: 90%;
-  transition: transform 0.5s ease-in-out;
+    flex: 0 0 calc(100% - 2rem);
+    scroll-snap-align: start;
+    width: 100%;
+    
+    @media (min-width: 1024px) {
+        flex: 0 0 calc(50% - 1rem);
+        width: 100%;
 
-  @media (min-width: 1024px) {
-    flex: 0 0 80%;
-    width: 80%;
-  }
+    }
 }
 
 .carousel-pagination {
-  /* display: flex; */
-  justify-content: center;
-  gap: 8px;
-  margin-top: 16px;
-  display: none;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    
+    @media (min-width: 1024px) {
+        margin: 1.5rem 0;
+    }
 }
 
 .pagination-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  transition: background-color 0.3s;
-  background: var(--m4-500);
-  opacity: 0.2;
-}
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--m4-500);
+    opacity: 0.2;
+    cursor: pointer;
+    transition: opacity 0.3s;
 
-.pagination-dot.current {
-  opacity: 1;
+    &.current {
+        opacity: 1;
+    }
 }
 </style>
 

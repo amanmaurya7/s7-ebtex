@@ -101,17 +101,12 @@ const backgroundTinted = {
   }
 
   @media (min-width: 1024px) {
-    border: 1px solid var(--m3-a20);
-    border-radius: 12px;
+   
     overflow: hidden;
-    margin-bottom: 1.5rem;
+    padding-top: 10px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 200px; /* Fixed height for desktop */
+    height: 200px;
 
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
 
     .image {
       width: 200px;

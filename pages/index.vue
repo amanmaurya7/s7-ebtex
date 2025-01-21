@@ -79,11 +79,11 @@ const { topEvents, featuredEvents } = useHome();
     display: grid;
     
     @media (min-width: 1024px) {
-      grid-template-columns: 1fr;  /* Changed to single column for desktop */
-      max-width: 800px;           /* Limit max width */
+      grid-template-columns: 1fr; 
+      max-width: 800px;          
       margin: 0 auto;  
-      margin-left: 465px;           /* Center the grid */
-      gap: 1.5rem;                /* Add space between cards if multiple */
+      margin-left: 465px;          
+      gap: 1.5rem;              
     }
   }
 
@@ -98,16 +98,16 @@ const { topEvents, featuredEvents } = useHome();
 
 section {
   padding: 0 1rem;
-  margin-bottom: 1rem; // Add spacing between sections
+  margin-bottom: 1rem; 
   
   @media (min-width: 1024px) {
-    padding: 1.5rem 2rem; // Reduced padding for better alignment
+    padding: 1.5rem 2rem; 
   }
 }
 
 .section-title {
   font-size: 1rem;
-  margin: 0.75rem 0 1rem; // Adjusted margins
+  margin: 0.75rem 0 1rem; 
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
@@ -148,14 +148,14 @@ section {
   padding: 0.5rem 1rem;
   color: var(--w1-500);
   font-weight: 600;
-  font-size: 0.55rem; // Increased from 10px for better readability
+  font-size: 0.55rem; 
   text-transform: uppercase;
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
   flex-wrap: nowrap;
   overflow: auto;
-  height: 2rem; // Fixed height for consistency
+  height: 2rem; 
 
   @media (min-width: 1024px) {
     font-size: 0.875rem;
@@ -187,13 +187,13 @@ section {
   border-radius: 6px;
   height: 100px;
   overflow: hidden;
-  margin: 0; // Remove any margin
+  margin: 0; 
 
   @media (min-width: 1024px) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     height: 140px;
-    max-width: 1400px; // Remove max-width constraint
+    max-width: 1400px; 
     margin-left: 280px;
     margin-right:80px;
     gap: 0;
@@ -212,17 +212,17 @@ section {
   }
 }
 
-// Section adjustments
 .new-collections-section {
   padding: 0;
   
   @media (min-width: 1024px) {
-    padding: 0;
+    margin-top: -10px;
+    margin-bottom: -20px;
     overflow: hidden;
   }
 }
 
-// If needed, add navigation button adjustments
+
 :deep(.carousel-nav) {
   button {
     @media (min-width: 1024px) {
@@ -232,13 +232,13 @@ section {
   }
 }
 
-// Event card styling
+
 :deep(.event-card) {
   background: #441e1e;
   border-radius: 0.5rem;
   overflow: hidden;
   transition: transform 0.2s ease-in-out;
-  height: 180px; // Fixed height for consistency
+  height: 180px; 
 
   @media (min-width: 1024px) {
     height: 250px;
@@ -250,7 +250,7 @@ section {
 
   img {
     width: 100%;
-    height: 120px; // Adjusted height for better proportion
+    height: 120px; 
     object-fit: cover;
     
     @media (min-width: 1024px) {
@@ -259,33 +259,32 @@ section {
   }
 }
 
-// Custom carousel adjustments
+
 :deep(.custom-carousel) {
   .carousel-container {
-    height: 120px; // Reduced height for mobile
-    
+    height: 120px; 
     @media (min-width: 1024px) {
-      height: 140px; // Adjusted to match collection item height
+      height: 140px; 
       max-width: 1400px;
       margin: 0 auto;
     }
   }
   
   .carousel-item {
-    padding: 0 0.25rem; // Minimal padding on mobile
+    padding: 0 0.25rem; 
     width: 100%;
     
     @media (min-width: 1024px) {
-      padding: 0 0.5rem; // Small gap between items
+      padding: 0 0.5rem; 
     }
   }
 
   .carousel-track {
     display: flex;
-    gap: 0; // Remove default gap
+    gap: 0; 
     
     @media (min-width: 1024px) {
-      margin: 0 -0.5rem; // Compensate for item padding
+      margin: 0 -0.5rem; 
     }
   }
 }

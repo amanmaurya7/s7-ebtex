@@ -24,6 +24,11 @@ defineProps({
   .events {
     display: flex;
     flex-direction: column;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   }
 }
 </style>
