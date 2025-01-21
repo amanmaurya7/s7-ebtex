@@ -130,7 +130,7 @@ const containerStyle = computed(() => ({
     flex-direction: column;
     justify-content: space-between;
     // background: inherit;
-    background-color: rgba(0,0,0,0.7);
+    background-color: #002E2E;
 
     @media (min-width: 1024px) {
         padding: 1.5rem;
