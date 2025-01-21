@@ -114,7 +114,7 @@ const { data: events, status } = getSearchEvents(params);
           {{ $t(value.name) }}
         </template>
         <template #option="{ option }">
-          {{ $t(option.name) }}
+            <div style="text-align: left; padding: 2px">{{ $t(option.name) }}</div>
         </template>
       </Dropdown>
     </div>
@@ -144,6 +144,7 @@ const { data: events, status } = getSearchEvents(params);
   display: flex;
   justify-content: space-between;
   padding: 0.5rem;
+  margin-bottom: 10px;
   background: var(--w2)
 }
 </style>
