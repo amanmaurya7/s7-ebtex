@@ -150,10 +150,19 @@ const onLeverageTooltipShow = () => {
 const onLeverageTooltipHide = () => {
     leverageTooltipActive.value = false;
 };
+
+const isLoading = ref(true);
+
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 1000);
+});
 </script>
 
 <template>
-  <div v-if="event" class="event">
+  <Loading v-if="isLoading" :full-screen="true" />
+  <div v-else-if="event" class="event">
     <div class="event-container">
       <section v-if="!isDepositingToOutcome && navigationItems.length > 0" class="navigations">
         <div v-for="(item, i) in navigationItems" :key="i" class="navigation-item" @click="onNavigationItemClick(item)">
