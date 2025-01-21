@@ -179,6 +179,7 @@ section {
   
   @media (min-width: 1024px) {
     max-height: 200px;
+    margin-bottom: 8px;
   }
 }
 

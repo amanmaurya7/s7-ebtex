@@ -19,6 +19,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .related-events {
+  
   padding: 0rem 0 0;
 
   .events {
@@ -27,8 +28,18 @@ defineProps({
 
     @media (min-width: 768px) {
       flex-direction: row;
+     
       flex-wrap: wrap;
     }
+
+    //add for desktop devices
+    @media (min-width: 1024px) {
+      flex-direction: row;
+     
+     flex-wrap: wrap;
+      
+    }
+    
   }
 }
 </style>
