@@ -4,12 +4,14 @@ const { params: { collectionSlug } } = useRoute();
 
 const { data: collection } = await getCollection(collectionSlug);
 
+const hasEvents = computed(() => collection.value?.events?.length > 0);
 </script>
 
 <template>
   <div v-if="collection" class="result-container">
     <SearchResultHeader class="result-header" :collection="collection" />
-    <SearchResultList class="result-list" :collection="collection" />
+    <NoEvents v-if="!hasEvents" />
+    <SearchResultList v-else class="result-list" :collection="collection" />
   </div>
 </template>
 

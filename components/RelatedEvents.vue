@@ -35,7 +35,6 @@ defineProps({
     //add for desktop devices
     @media (min-width: 1024px) {
       flex-direction: row;
-     
      flex-wrap: wrap;
       
     }
