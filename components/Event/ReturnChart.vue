@@ -330,19 +330,46 @@ chartOptions.scales.y1.ticks = {
 };
 
 </script>
-
 <template>
-  <div>
-    <Chart
-      v-if="outcomesProbChartData"
-      class="chart p-2"
-      :plugins="[NowLinePlugin.make({ color: props.chartFocusColor })]"
-      :data="outcomesProbChartData"
-      :options="chartOptions"
-    />
-  </div>
-</template>
-
-<style scoped>
-/* Add any necessary styles for your component */
-</style>
+    <div class="chart-container">
+      <Chart
+        v-if="outcomesProbChartData"
+        class="chart"
+        :plugins="[NowLinePlugin.make({ color: props.chartFocusColor })]"
+        :data="outcomesProbChartData"
+        :options="chartOptions"
+      />
+    </div>
+  </template>
+  
+  <style scoped>
+  .chart-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .chart {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+  
+  :deep(.chart canvas) {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    display: block;
+  }
+  
+  @media (min-width: 1024px) {
+    .chart-container {
+      max-width: 100%;
+    }
+    
+    :deep(.chart canvas) {
+      max-width: 100%;
+    }
+  }
+  </style>

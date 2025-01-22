@@ -386,5 +386,30 @@ chartOptions.scales.y1.ticks = {
 </template>
 
 <style scoped>
-/* Add any necessary styles for your component */
+
+  
+  .chart {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+  
+  :deep(.chart canvas) {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    display: block;
+  }
+  
+  @media (min-width: 1024px) {
+    .chart-container {
+      max-width: 100%;
+    }
+    
+    :deep(.chart canvas) {
+      max-width: 100%;
+    }
+  }
+
 </style>
