@@ -720,15 +720,16 @@ onMounted(() => {
 
 .quick-bet-wrapper {
   display: flex;
-  justify-content: space-around;
-  padding: 1rem 1rem;
-  margin: 0rem -1.25rem .25rem;
+  padding: 1rem;
+  margin: 0;  
 }
 
 .quick-bet-option {
   font-size: 1.25rem;
   font-weight: bold;
+  margin: auto;
   padding: .5rem 1.25rem;
+  
   cursor: pointer;
   flex-grow: 1;
   text-align: center;
@@ -750,7 +751,7 @@ onMounted(() => {
     border-left: none;
   }
 
-  &.quick-bet-selected, &:hover {
+  &.quick-bet-selected, {
     color: white;
     background-color: var(--k1-500);
     border-radius: 5px;
