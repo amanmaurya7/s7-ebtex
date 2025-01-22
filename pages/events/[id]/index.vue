@@ -751,10 +751,11 @@ onMounted(() => {
     border-left: none;
   }
 
-  &.quick-bet-selected, {
+  &.quick-bet-selected {
     color: white;
     background-color: var(--k1-500);
     border-radius: 5px;
+    
     &:not(:last-child) {
       border-right: none;
     }
@@ -862,16 +863,13 @@ onMounted(() => {
 
 .desktop-layout {
   @media (min-width: 1024px) {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    max-width: 1000px;
-    align-items: center;
-    margin-left: 290px;
+    max-width: 600px;
+    margin-left: 260px;
     
     .event-detail, .event-options {
-      
       margin: 0 auto;
     }
   }
@@ -879,8 +877,8 @@ onMounted(() => {
 
 .desktop-left-column {
   @media (min-width: 1024px) {
-    position: sticky;
-    top: 2rem;
+    position: relative;  // Changed from sticky to relative
+    top: 0;  // Removed sticky positioning
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -899,6 +897,9 @@ onMounted(() => {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto 0;  // Added margin-top for spacing
   }
 }
 
@@ -922,7 +923,7 @@ onMounted(() => {
     }
     
     .quick-bet-wrapper {
-      margin: 0;
+      margin-top: 0;
     }
   }
 }
