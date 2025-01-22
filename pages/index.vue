@@ -41,7 +41,10 @@ const { topEvents, featuredEvents } = useHome();
     </section>
 
     <section v-if="featuredEvents" class="featured-events-section">
-      <div class="section-title font-1375 mt-0 pt-250" v-html="$t('landing.featured_events')" />
+      <div class="section-title">
+        <span class="featured">FEATURED</span>
+        <span class="events">EVENTS</span>
+      </div>
       <div class="events-grid">
         <EventCardFeatured
           v-for="(item, index) in featuredEvents"
@@ -106,39 +109,34 @@ section {
 }
 
 .section-title {
-  font-size: 1rem;
-  margin: 0.75rem 0 1rem; 
+  margin: 0.75rem 0 1rem;
   text-align: center;
-  text-transform: uppercase;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
   
   @media (min-width: 1024px) {
     font-size: 1.375rem;
     margin-bottom: 1.5rem;
   }
-}
 
-.featured-events-section {
-  background: var(--w2-500);
-  padding: 1rem;
-  
-  @media (min-width: 1024px) {
-    padding: 1.5rem 2rem;
-  }
-
-  .events-grid {
-    display: grid;
+  .featured {
+    color: #00D1D1;
+    font-size: 1rem;
     
     @media (min-width: 1024px) {
-      grid-template-columns: repeat(2, 1fr);
+      font-size: 1.5rem;
     }
   }
 
-  .hidden-mobile {
-    display: none;
+  .events {
+    color: #000000;
+    font-size: 1rem;
     
     @media (min-width: 1024px) {
-      display: block;
+      font-size: 1.375rem;
     }
   }
 }
@@ -148,14 +146,21 @@ section {
   padding: 0.5rem 1rem;
   color: var(--w1-500);
   font-weight: 600;
-  font-size: 0.55rem; 
+  font-size: 0.75rem;
   text-transform: uppercase;
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
+  gap: 1rem;
   flex-wrap: nowrap;
-  overflow: auto;
-  height: 2rem; 
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 2.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media (min-width: 1024px) {
     font-size: 0.875rem;
@@ -164,10 +169,17 @@ section {
     flex-wrap: wrap;
     gap: 2rem;
     height: auto;
+    overflow: visible;
   }
 
   & > * {
     flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0.25rem 0.5rem;
+    
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 
@@ -196,7 +208,7 @@ section {
     height: 140px;
     max-width: 1400px; 
     margin-left: 280px;
-    margin-right:80px;
+    margin-right: 80px;
     gap: 0;
   }
 
@@ -223,7 +235,6 @@ section {
   }
 }
 
-
 :deep(.carousel-nav) {
   button {
     @media (min-width: 1024px) {
@@ -232,7 +243,6 @@ section {
     }
   }
 }
-
 
 :deep(.event-card) {
   background: #441e1e;
@@ -259,7 +269,6 @@ section {
     }
   }
 }
-
 
 :deep(.custom-carousel) {
   .carousel-container {
