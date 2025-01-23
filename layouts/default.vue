@@ -25,7 +25,7 @@ const setupChatbotCustomization = () => {
             <div class="mt-4 mb-2 flex h-10 items-center">
             </div>
             <div class="flex items-center">
-              <button class="close-chat-btn flex items-center justify-center" title="Close chat bubble" style="position: absolute; right: 14px; top: 60%; transform: translateY(-50%); background: #3C3C3F; color: white; font-size: 24px; width: 28px; height: 28px; line-height: 1; border: none; outline: none; padding: 0;">
+              <button class="close-chat-btn flex items-center justify-center" title="Close chat bubble" style="position: absolute; right: 14px; top: 7  0%; transform: translateY(-50%); background: #3C3C3F; color: white; font-size: 24px; width: 28px; height: 28px; line-height: 1; border: none; outline: none; padding: 0;">
                 X
               </button>
             </div>
