@@ -12,6 +12,7 @@ onMounted(() => {
         domain: "www.chatbase.co"
     };
 });
+
 </script>
 
 <template>

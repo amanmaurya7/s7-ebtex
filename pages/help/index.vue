@@ -116,7 +116,8 @@ const filteredQuestions = computed(() => {
         >
           <template #content>
             <img src="/images/v1.5/icon-chat.png" width="20" height="16" alt="chat" class="mr-2">
-            {{ isChatOpen ? $t('Close Chat') : $t('button.chat_with_us') }}
+            <span class="hidden md:inline">{{ isChatOpen ? $t('Close Chat') : $t('button.chat_with_us') }}</span>
+            <span class="md:hidden">{{ $t('button.chat_with_us') }}</span>
           </template>
         </GradientButton>
       </div>
