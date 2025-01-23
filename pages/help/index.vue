@@ -8,8 +8,14 @@ import FAQList from '~/components/FAQ/FAQList.vue';
 const { sections, fetchFaqs } = useFaq();
 await fetchFaqs();
 
+const isChatOpen = ref(false);
+
 const onClickMoreDetail = () => {
-    document.getElementById('chatbase-bubble-button').click();
+    const chatButton = document.getElementById('chatbase-bubble-button');
+    if (chatButton) {
+        chatButton.click();
+        isChatOpen.value = !isChatOpen.value;
+    }
 };
 
 const keyword = ref('');
@@ -110,7 +116,7 @@ const filteredQuestions = computed(() => {
         >
           <template #content>
             <img src="/images/v1.5/icon-chat.png" width="20" height="16" alt="chat" class="mr-2">
-            {{ $t('button.chat_with_us') }}
+            {{ isChatOpen ? $t('Close Chat') : $t('button.chat_with_us') }}
           </template>
         </GradientButton>
       </div>
