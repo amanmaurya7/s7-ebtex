@@ -37,11 +37,11 @@ const onOptionClick = (o) => {
 </script>
 
 <template>
-  <div class="flex justify-content-between mb-2 px-3 uppercase font-75">
-    <div class="event-outcome-select-header text-left text-white">
+  <div class="outcome-header-container mb-2 px-3 uppercase font-75">
+    <div class="event-outcome-select-header text-white">
       {{ $t('outcome_select.outcome') }}
     </div>
-    <div class="event-outcome-select-header text-right text-white">
+    <div class="event-outcome-select-header text-white">
       <Tooltip :tooltip-content="$t('betting.projected_payout_tooltip')"> 
         {{ $t('outcome_select.probability') }}
       </Tooltip>
@@ -61,4 +61,28 @@ const onOptionClick = (o) => {
 </template>
 
 <style lang="scss" scoped>
+.outcome-header-container {
+
+  display: flex;
+  font-size: 15px;
+  justify-content: space-between;
+  
+ 
+  @media screen and (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem; 
+    
+    .event-outcome-select-header {
+      &:first-child {
+        text-align: left;
+        padding-right: 5rem;
+      }
+      &:last-child {
+        text-align: right;
+        padding-left: 18rem; 
+      }
+    }
+  }
+}
 </style>
