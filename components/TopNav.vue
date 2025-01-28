@@ -114,7 +114,7 @@ const isInSignupPage = computed(() => {
 
   @media (min-width: 1024px) {
     padding: 0.625rem 2.5rem;
-    height: 70px;
+    height: 60px;
 
     .logo {
       position: static;
