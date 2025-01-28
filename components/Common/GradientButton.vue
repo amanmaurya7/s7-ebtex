@@ -47,6 +47,7 @@ const handleClick = (event) => {
     border: none;
     background-size: contain;
     border-radius: 6px;
+
 }
 
 .gradient-green {
