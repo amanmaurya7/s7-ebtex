@@ -25,8 +25,10 @@ const setupChatbotCustomization = () => {
             <div class="mt-4 mb-2 flex h-10 items-center">
             </div>
             <div class="flex items-center">
-              <button class="close-chat-btn flex items-center justify-center" title="Close chat bubble" style="position: absolute; right: 14px; top: 60%; transform: translateY(-50%); background: #3C3C3F; color: white; font-size: 24px; width: 28px; height: 28px; line-height: 1; border: none; outline: none; padding: 0;">
-                X
+                <button class="close-chat-btn flex items-center justify-center" title="Close chat bubble" style="position: absolute; right: 20px; top: 60%; transform: translateY(-50%); background: none; border: none; outline: none; padding: 0; cursor: pointer; opacity: 0.8;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 92 92">
+                  <path d="M70.7 64.3c1.8 1.8 1.8 4.6 0 6.4-.9.9-2 1.3-3.2 1.3-1.2 0-2.3-.4-3.2-1.3L46 52.4 27.7 70.7c-.9.9-2 1.3-3.2 1.3s-2.3-.4-3.2-1.3c-1.8-1.8-1.8-4.6 0-6.4L39.6 46 21.3 27.7c-1.8-1.8-1.8-4.6 0-6.4 1.8-1.8 4.6-1.8 6.4 0L46 39.6l18.3-18.3c1.8-1.8 4.6-1.8 6.4 0 1.8 1.8 1.8 4.6 0 6.4L52.4 46l18.3 18.3z" fill="#ffffff"/>
+                </svg>
               </button>
             </div>
           </header>
@@ -111,6 +113,9 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+.close-chat-btn:hover svg {
+  opacity: 0.8;
+}
 </style>
 
 

@@ -256,80 +256,40 @@ section {
   &.user-info {
     position: relative;
     padding: 1rem;
+    width: 100%;
     background-image: 
       url('/images/v1.5/bg-portfolio-header-deco.png'),
       url('/images/v1.5/bg-portfolio-header.png');
     background-position: center, center;
     background-repeat: no-repeat, no-repeat;
     background-size: cover, cover;
+
+    @media (min-width: 1024px) {
+      padding: 2rem;
+      
+      // Add a container for content
+      > div {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+    }
   }
 
-  &.wagering-history {
-    margin-bottom: 1.25rem;
-  }
-}
-
-.edit-btn {
-  padding: 2px;
-  width: auto;
-}
-
-.avatar {
-  width: 80px;
-  height: fit-content;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--m4-500);
-  margin: 1.375rem auto;
-  box-shadow: 0 0 8px 1px var(--m4-500);
-
-  img {
+  &.wallet {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    
+    @media (min-width: 1024px) {
+      padding: 0 2rem;
+      
+      > div:not(.wallet-wrapper) {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+    }
   }
 }
 
-.achievements {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  margin-bottom: 1rem;
-
-  .achievement-item {
-    flex: 1 1 65px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: .5rem;
-    background-color: var(--blue-500);
-    color: var(--gold-500);
-  }
-}
-
-.scenario-list-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  color: var(--gold-500);
-  border-bottom: 1px solid #000;
-  padding: .5rem .25rem;
-
-  &:last-child {
-    border-color: transparent;
-  }
-}
-
-.wallet-info {
-  background-color: var(--indigo-500);
-  color: var(--gold-500);
-  padding: .5rem;
-  display: flex;
-  gap: .5rem;
-  text-align: center;
-}
-
+// Update wallet wrapper to be full width with contained content
 .wallet-wrapper {
   border: 1px solid var(--m3-a20);
   margin: 3rem .5rem 3rem;
@@ -355,6 +315,163 @@ section {
       font-weight: bold;
     }
   }
+
+  @media (min-width: 1024px) {
+    width: 100%;
+    max-width: none;
+    
+    > div {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// Update TabView container to be full width
+:deep(.p-tabview) {
+  width: 100%;
+  
+  @media (min-width: 1024px) {
+    .p-tabview-panels {
+      padding: 0;
+      
+      > div {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+    }
+  }
+}
+
+// Update transaction accordion to be full width
+:deep(.transaction-accordion) {
+  width: 100%;
+  
+  @media (min-width: 1024px) {
+    .p-accordion-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// Update wager position list to be full width
+.wager-position-list {
+  width: 100%;
+  
+  @media (min-width: 1024px) {
+    > div {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+  }
+}
+
+.avatar {
+  width: 80px;
+  height: fit-content;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--m4-500);
+  margin: 1.375rem auto;
+  box-shadow: 0 0 8px 1px var(--m4-500);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 1024px) {
+    width: 120px;
+    margin: 2rem auto;
+  }
+}
+
+// Add responsive styles for achievements section
+.achievements {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: 1rem;
+
+  .achievement-item {
+    flex: 1 1 65px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .5rem;
+    background-color: var(--blue-500);
+    color: var(--gold-500);
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    
+    .achievement-item {
+      flex: 1 1 200px;
+      padding: 1rem;
+    }
+  }
+}
+
+// Adjust TabView for desktop
+:deep(.p-tabview) {
+  @media (min-width: 1024px) {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .p-tabview-panels {
+      padding: 0 2rem;
+    }
+  }
+}
+
+// Adjust transaction history width
+:deep(.transaction-accordion) {
+  @media (min-width: 1024px) {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+// Adjust wager position list width
+.wager-position-list {
+  @media (min-width: 1024px) {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+}
+
+.edit-btn {
+  padding: 2px;
+  width: auto;
+}
+
+.scenario-list-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--gold-500);
+  border-bottom: 1px solid #000;
+  padding: .5rem .25rem;
+
+  &:last-child {
+    border-color: transparent;
+  }
+}
+
+.wallet-info {
+  background-color: var(--indigo-500);
+  color: var(--gold-500);
+  padding: .5rem;
+  display: flex;
+  gap: .5rem;
+  text-align: center;
 }
 
 :deep(.p-tabview-header-action) {

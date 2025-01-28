@@ -59,6 +59,7 @@ const onBackClick = () => {
 .back-button {
     width: 60px;
     height: 60px;
+    margin-top: 8px;
     background: var(--m4-500);
     align-items: center;
     justify-content: center;
@@ -76,6 +77,7 @@ const onBackClick = () => {
   font-size: 0.9375rem;
   font-weight: bold;
   align-items: center;
+  margin-top: 8px;
   padding: 0px 1.25rem;
   gap: 0.5rem;
 

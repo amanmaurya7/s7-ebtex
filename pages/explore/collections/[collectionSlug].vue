@@ -20,14 +20,21 @@ const hasEvents = computed(() => collection.value?.events?.length > 0);
 .result-container {
     background: var(--m1-500);
     min-height: 60vh;
+    display: flex;
+    justify-content: center;
 }
 
 .result-header {
     position: fixed;
     top: 60px;
-    width: 100vw;
+    width: 100%;
     background-color: white;
     z-index: 10;
+
+    @media (min-width: 1024px) {
+        width: 1200px;
+        padding: 0 2rem;
+    }
 }
 
 .result-list {

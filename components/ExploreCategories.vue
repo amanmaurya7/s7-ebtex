@@ -8,7 +8,9 @@ const categories = ref([]);
 const { getCategories } = useApi();
 const prepareCategories = async () => {
     isLoading.value = true;
+    console.log('Fetching categories...');
     const { data } = await getCategories();
+    console.log('Categories received:', data.value);
     categories.value = data.value;
     isLoading.value = false;
 };

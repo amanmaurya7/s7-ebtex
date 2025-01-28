@@ -214,7 +214,7 @@ await updateNotificationStatus();
 </template>
 
 <style lang="scss" scoped>
-
+  
 .navbar {
   z-index: 99;
   position: fixed;

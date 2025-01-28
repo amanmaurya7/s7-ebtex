@@ -53,6 +53,7 @@ const updateKeyword = () => {
   min-height: 50vh;
   border-radius: 8px;
   margin-top: 2rem;
+  margin-bottom: 20px;
 }
 
 .page-title {
@@ -129,6 +130,7 @@ const updateKeyword = () => {
 
   .search-button {
     width: calc(100vw - 3rem);
+
   }
 }
 </style>
