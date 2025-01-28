@@ -386,8 +386,9 @@ section {
   }
 
   @media (min-width: 1024px) {
-    width: 120px;
+    width: 100px;
     margin: 2rem auto;
+    
   }
 }
 
